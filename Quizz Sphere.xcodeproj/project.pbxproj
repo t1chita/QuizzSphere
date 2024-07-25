@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26594A2B2C52F5AE008C6D04 /* QSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A2A2C52F5AE008C6D04 /* QSLabel.swift */; };
+		26594A2E2C52FB27008C6D04 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A2D2C52FB27008C6D04 /* AppConstants.swift */; };
+		26594A302C52FBF7008C6D04 /* EBGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */; };
+		26594A312C5301EE008C6D04 /* EBGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB782C51AA77000995A4 /* EBGaramond-Regular.ttf */; };
+		26594A322C5301F1008C6D04 /* EBGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB792C51AA77000995A4 /* EBGaramond-SemiBold.ttf */; };
+		26594A332C5301F1008C6D04 /* EBGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB792C51AA77000995A4 /* EBGaramond-SemiBold.ttf */; };
+		26594A342C5301F2008C6D04 /* EBGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB792C51AA77000995A4 /* EBGaramond-SemiBold.ttf */; };
+		26594A352C5301F5008C6D04 /* EBGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */; };
+		26594A362C5301F5008C6D04 /* EBGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */; };
+		26594A372C5301F8008C6D04 /* EBGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB782C51AA77000995A4 /* EBGaramond-Regular.ttf */; };
+		26594A382C5301F9008C6D04 /* EBGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB782C51AA77000995A4 /* EBGaramond-Regular.ttf */; };
 		268DCB3E2C51A28F000995A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3D2C51A28F000995A4 /* AppDelegate.swift */; };
 		268DCB402C51A28F000995A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */; };
 		268DCB482C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB462C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld */; };
@@ -51,6 +62,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		26594A2A2C52F5AE008C6D04 /* QSLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSLabel.swift; sourceTree = "<group>"; };
+		26594A2D2C52FB27008C6D04 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Bold.ttf"; sourceTree = "<group>"; };
 		268DCB3A2C51A28F000995A4 /* Quizz Sphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quizz Sphere.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		268DCB3D2C51A28F000995A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,6 +122,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26594A2C2C52FB1C008C6D04 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				26594A2D2C52FB27008C6D04 /* AppConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		268DCB312C51A28F000995A4 = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +246,7 @@
 		268DCB772C51A9BE000995A4 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */,
 				268DCB782C51AA77000995A4 /* EBGaramond-Regular.ttf */,
 				268DCB792C51AA77000995A4 /* EBGaramond-SemiBold.ttf */,
 			);
@@ -233,6 +256,7 @@
 		268DCB7A2C51AAB2000995A4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				26594A2C2C52FB1C008C6D04 /* Constants */,
 				268DCB7D2C51AB1F000995A4 /* Utils */,
 				268DCB7C2C51AB0D000995A4 /* Components */,
 				268DCB7B2C51AB05000995A4 /* Models */,
@@ -254,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				268DCB822C51AB83000995A4 /* QSTextField.swift */,
+				26594A2A2C52F5AE008C6D04 /* QSLabel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -424,6 +449,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26594A302C52FBF7008C6D04 /* EBGaramond-Bold.ttf in Resources */,
+				26594A312C5301EE008C6D04 /* EBGaramond-Regular.ttf in Resources */,
+				26594A322C5301F1008C6D04 /* EBGaramond-SemiBold.ttf in Resources */,
 				268DCB4A2C51A291000995A4 /* Assets.xcassets in Resources */,
 				268DCB4D2C51A291000995A4 /* Base in Resources */,
 			);
@@ -433,6 +461,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26594A372C5301F8008C6D04 /* EBGaramond-Regular.ttf in Resources */,
+				26594A332C5301F1008C6D04 /* EBGaramond-SemiBold.ttf in Resources */,
+				26594A352C5301F5008C6D04 /* EBGaramond-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +471,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26594A382C5301F9008C6D04 /* EBGaramond-Regular.ttf in Resources */,
+				26594A342C5301F2008C6D04 /* EBGaramond-SemiBold.ttf in Resources */,
+				26594A362C5301F5008C6D04 /* EBGaramond-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +488,7 @@
 				268DCBA52C51D479000995A4 /* ProfileViewModel.swift in Sources */,
 				268DCB862C51ABBC000995A4 /* IntExtensions.swift in Sources */,
 				268DCB3E2C51A28F000995A4 /* AppDelegate.swift in Sources */,
+				26594A2E2C52FB27008C6D04 /* AppConstants.swift in Sources */,
 				268DCB832C51AB83000995A4 /* QSTextField.swift in Sources */,
 				268DCB892C51ABF1000995A4 /* SignUpSignInVC.swift in Sources */,
 				268DCB992C51C612000995A4 /* SignUpSignInCoordinator.swift in Sources */,
@@ -462,6 +497,7 @@
 				268DCB7F2C51AB57000995A4 /* Coordinator.swift in Sources */,
 				268DCB9B2C51C7F2000995A4 /* TabBarCoordinator.swift in Sources */,
 				268DCB482C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld in Sources */,
+				26594A2B2C52F5AE008C6D04 /* QSLabel.swift in Sources */,
 				268DCB972C51C1CB000995A4 /* HomeViewModel.swift in Sources */,
 				268DCBA32C51D470000995A4 /* ProfileVC.swift in Sources */,
 				268DCB8B2C51AC2D000995A4 /* SignUpSignInViewModel.swift in Sources */,

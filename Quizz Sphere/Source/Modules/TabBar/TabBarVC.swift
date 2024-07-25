@@ -30,7 +30,7 @@ enum TabBarPage {
         case .home:
             return "Home"
         case .leaderBoard:
-            return "LeaderBoard"
+            return "Leaderboard"
         case .profile:
             return "Profile"
         }
@@ -47,6 +47,16 @@ enum TabBarPage {
         }
     }
 
+    func pageIcon() -> UIImage {
+        switch self {
+        case .home:
+            return UIImage(systemName: "house.fill")!
+        case .leaderBoard:
+            return  UIImage(systemName: "trophy.fill")!
+        case .profile:
+            return  UIImage(systemName: "person.fill")!
+        }
+    }
     // Add tab icon value
     
     // Add tab icon selected / deselected color
