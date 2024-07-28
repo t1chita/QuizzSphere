@@ -15,16 +15,16 @@ public enum AppConstants {
             static let bold = UIFont(name: "EBGaramond-Bold", size: FontSize.boldFontSize)
         }
         
+        private enum FontSize {
+            static let boldFontSize: CGFloat = 24
+            static let semiBoldFontSize: CGFloat = 18
+            static let regularFontSize: CGFloat = 16
+        }
+        
         public enum FontType {
             case regular
             case semiBold
             case bold
-        }
-        
-        public enum FontSize {
-            static let boldFontSize: CGFloat = 24
-            static let semiBoldFontSize: CGFloat = 18
-            static let regularFontSize: CGFloat = 16
         }
     }
     

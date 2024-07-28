@@ -20,6 +20,8 @@ final class QSCheckBoxButton: UIButton {
     init() {
         super.init(frame: .zero)
         setQSCheckBoxButton()
+        translatesAutoresizingMaskIntoConstraints = false
+
     }
     
     required init?(coder: NSCoder) {
@@ -35,12 +37,10 @@ final class QSCheckBoxButton: UIButton {
         layer.borderColor = UIColor.black.cgColor
         layer.masksToBounds = true
         backgroundColor = .clear
-        frame = CGRect(x: 0, y: 0, width: 22, height: 22)
         addAction(UIAction(handler: { [weak self] _ in
             self?.changeCheckmark()
             self?.isChecked.toggle()
         }), for: .touchUpInside)
-        translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.widthAnchor.constraint(equalToConstant: 22),
             self.heightAnchor.constraint(equalToConstant: 22)
@@ -49,11 +49,8 @@ final class QSCheckBoxButton: UIButton {
     }
     
     private func changeCheckmark() {
-         if isChecked {
-             setImage(nil, for: .normal)
-         } else {
-             setImage(checkedImage, for: .normal)
-         }
+         let image = isChecked ? checkedImage : nil
+         setImage(image, for: .normal)
      }
 }
 

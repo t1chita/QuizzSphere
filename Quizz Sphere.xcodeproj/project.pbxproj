@@ -20,6 +20,7 @@
 		26594A382C5301F9008C6D04 /* EBGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 268DCB782C51AA77000995A4 /* EBGaramond-Regular.ttf */; };
 		26594A422C55A08A008C6D04 /* LabelValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A412C55A08A008C6D04 /* LabelValues.swift */; };
 		26594A442C55B3A1008C6D04 /* QSCheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */; };
+		26594A462C55CADB008C6D04 /* QSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A452C55CADB008C6D04 /* QSButton.swift */; };
 		268DCB3E2C51A28F000995A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3D2C51A28F000995A4 /* AppDelegate.swift */; };
 		268DCB402C51A28F000995A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */; };
 		268DCB482C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB462C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld */; };
@@ -69,6 +70,7 @@
 		26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Bold.ttf"; sourceTree = "<group>"; };
 		26594A412C55A08A008C6D04 /* LabelValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelValues.swift; sourceTree = "<group>"; };
 		26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSCheckBoxButton.swift; sourceTree = "<group>"; };
+		26594A452C55CADB008C6D04 /* QSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSButton.swift; sourceTree = "<group>"; };
 		268DCB3A2C51A28F000995A4 /* Quizz Sphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quizz Sphere.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		268DCB3D2C51A28F000995A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				268DCB822C51AB83000995A4 /* QSTextField.swift */,
 				26594A2A2C52F5AE008C6D04 /* QSLabel.swift */,
 				26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */,
+				26594A452C55CADB008C6D04 /* QSButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				26594A2E2C52FB27008C6D04 /* AppConstants.swift in Sources */,
 				268DCB832C51AB83000995A4 /* QSTextField.swift in Sources */,
 				268DCB892C51ABF1000995A4 /* SignUpSignInVC.swift in Sources */,
+				26594A462C55CADB008C6D04 /* QSButton.swift in Sources */,
 				268DCB992C51C612000995A4 /* SignUpSignInCoordinator.swift in Sources */,
 				268DCB8D2C51B141000995A4 /* AppCoordinator.swift in Sources */,
 				268DCB812C51AB69000995A4 /* User.swift in Sources */,

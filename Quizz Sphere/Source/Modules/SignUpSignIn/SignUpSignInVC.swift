@@ -76,7 +76,8 @@ class SignUpSignInVC: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
+        stackView.setCustomSpacing(40, after: signInButton)
         stackView.spacing = Constants.verticalStackViewSpacing
         return stackView
     }()
@@ -128,6 +129,14 @@ class SignUpSignInVC: UIViewController {
                         textColor: .blue)
         return label
     }()
+    
+    private lazy var signInButton: QSButton = {
+        let button = QSButton()
+        button.configure(with: LabelValues.Scenes.SignInSignUp.logIn,
+                         fontType: .regular,
+                         cornerRadius: Constants.checkBoxCornerRadius)
+        return button
+    }()
     //MARK: - Initialisation
     init(signUpSignInViewModel: SignUpSignInViewModel) {
         self.signUpSignInViewModel = signUpSignInViewModel
@@ -155,6 +164,7 @@ class SignUpSignInVC: UIViewController {
         setBottomUnderLineView()
         setFormStackView()
         setPasswordFunctionalityStackView()
+        setSignInButton()
     }
     
     //MARK: - Set UI Components
@@ -225,6 +235,11 @@ class SignUpSignInVC: UIViewController {
         passwordFunctionalityStackView.addArrangedSubview(checkBoxButton)
         passwordFunctionalityStackView.addArrangedSubview(rememberPasswordLabel)
         passwordFunctionalityStackView.addArrangedSubview(forgetPasswordLabel)
+    }
+    
+    private func setSignInButton() {
+        signInFormStackView.addArrangedSubview(signInButton)
+        
     }
     
     //MARK: - UI Updates
