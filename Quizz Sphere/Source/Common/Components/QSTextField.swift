@@ -35,10 +35,11 @@ final class QSTextField: UITextField {
     
     public func configure(withPadding padding: PaddingSpace,
                           iconName: String,
-                          placeHolder: String) {
+                          placeHolder: String,
+                          isSecured: Bool = false) {
         let icon = UIImageView(image: UIImage(systemName: iconName))
         icon.contentMode = .scaleAspectFit
-        icon.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
+        icon.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         icon.tintColor = .white
         
         leftViewMode = .always
@@ -63,12 +64,15 @@ final class QSTextField: UITextField {
         }
         
         self.placeholder = placeHolder
+        self.isSecureTextEntry = isSecured
     }
     
     private func setupTextField() {
+        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         font = AppConstants.Font.EBGaramond.regular
         textColor = .primaryText
+        heightAnchor.constraint(equalToConstant: 26).isActive = true
     }
 }
 

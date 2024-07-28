@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		262065192C56938300484B3F /* QSVerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262065182C56938300484B3F /* QSVerticalStackView.swift */; };
 		26594A2B2C52F5AE008C6D04 /* QSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A2A2C52F5AE008C6D04 /* QSLabel.swift */; };
 		26594A2E2C52FB27008C6D04 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A2D2C52FB27008C6D04 /* AppConstants.swift */; };
 		26594A302C52FBF7008C6D04 /* EBGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */; };
@@ -65,6 +66,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		262065182C56938300484B3F /* QSVerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSVerticalStackView.swift; sourceTree = "<group>"; };
 		26594A2A2C52F5AE008C6D04 /* QSLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSLabel.swift; sourceTree = "<group>"; };
 		26594A2D2C52FB27008C6D04 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		26594A2F2C52FBF7008C6D04 /* EBGaramond-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EBGaramond-Bold.ttf"; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				26594A2A2C52F5AE008C6D04 /* QSLabel.swift */,
 				26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */,
 				26594A452C55CADB008C6D04 /* QSButton.swift */,
+				262065182C56938300484B3F /* QSVerticalStackView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				268DCB7F2C51AB57000995A4 /* Coordinator.swift in Sources */,
 				268DCB9B2C51C7F2000995A4 /* TabBarCoordinator.swift in Sources */,
 				268DCB482C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld in Sources */,
+				262065192C56938300484B3F /* QSVerticalStackView.swift in Sources */,
 				26594A2B2C52F5AE008C6D04 /* QSLabel.swift in Sources */,
 				268DCB972C51C1CB000995A4 /* HomeViewModel.swift in Sources */,
 				268DCBA32C51D470000995A4 /* ProfileVC.swift in Sources */,

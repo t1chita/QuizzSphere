@@ -71,18 +71,13 @@ class SignUpSignInVC: UIViewController {
         return bottomUnderlineView.leftAnchor.constraint(equalTo: segmentedControl.leftAnchor)
     }()
     
-    private lazy var signInFormStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
-        stackView.setCustomSpacing(40, after: signInButton)
+    private lazy var signInFormStackView: QSVerticalStackView = {
+        let stackView = QSVerticalStackView()
         stackView.spacing = Constants.verticalStackViewSpacing
         return stackView
     }()
     
-    private lazy var emailTextField: QSTextField = {
+    private lazy var signInEmailTextField: QSTextField = {
         let emailTextField = QSTextField()
         emailTextField.configure(withPadding: .left(Constants.textFieldPadding),
                                  iconName: AppConstants.Images.SystemNames.emailIcon,
@@ -90,11 +85,12 @@ class SignUpSignInVC: UIViewController {
         return emailTextField
     }()
     
-    private lazy var passwordTextField: QSTextField = {
+    private lazy var signInPasswordTextField: QSTextField = {
         let passwordTextField = QSTextField()
         passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
                                     iconName: AppConstants.Images.SystemNames.passwordIcon,
-                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder)
+                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder,
+                                    isSecured: true)
         return passwordTextField
     }()
     
@@ -109,7 +105,7 @@ class SignUpSignInVC: UIViewController {
     
     private lazy var checkBoxButton: QSCheckBoxButton = {
         let button = QSCheckBoxButton()
-        button.configure(withCornerRadius: Constants.checkBoxCornerRadius)
+        button.configure(withCornerRadius: Constants.buttonCornerRadius)
         return button
     }()
     
@@ -134,9 +130,51 @@ class SignUpSignInVC: UIViewController {
         let button = QSButton()
         button.configure(with: LabelValues.Scenes.SignInSignUp.logIn,
                          fontType: .regular,
-                         cornerRadius: Constants.checkBoxCornerRadius)
+                         cornerRadius: Constants.buttonCornerRadius)
         return button
     }()
+    
+    private lazy var signUpFormStackView: QSVerticalStackView = {
+        let stackView = QSVerticalStackView()
+        stackView.spacing = Constants.verticalStackViewSpacing
+        stackView.isHidden = true
+        return stackView
+    }()
+    
+    private lazy var signUpEmailTextField: QSTextField = {
+        let emailTextField = QSTextField()
+        emailTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                 iconName: AppConstants.Images.SystemNames.emailIcon,
+                                 placeHolder: LabelValues.Scenes.SignInSignUp.emailPlaceHolder)
+        return emailTextField
+    }()
+    
+    private lazy var signUpPasswordTextField: QSTextField = {
+        let passwordTextField = QSTextField()
+        passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                    iconName: AppConstants.Images.SystemNames.passwordIcon,
+                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder,
+                                    isSecured: true)
+        return passwordTextField
+    }()
+    
+    private lazy var signUpPasswordConfirmTextField: QSTextField = {
+        let passwordTextField = QSTextField()
+        passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                    iconName: AppConstants.Images.SystemNames.passwordIcon,
+                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder,
+                                    isSecured: true)
+        return passwordTextField
+    }()
+    
+    private lazy var signUpButton: QSButton = {
+        let button = QSButton()
+        button.configure(with: LabelValues.Scenes.SignInSignUp.signUp,
+                         fontType: .regular,
+                         cornerRadius: Constants.buttonCornerRadius)
+        return button
+    }()
+    
     //MARK: - Initialisation
     init(signUpSignInViewModel: SignUpSignInViewModel) {
         self.signUpSignInViewModel = signUpSignInViewModel
@@ -164,7 +202,7 @@ class SignUpSignInVC: UIViewController {
         setBottomUnderLineView()
         setFormStackView()
         setPasswordFunctionalityStackView()
-        setSignInButton()
+        setSignUpStackView()
     }
     
     //MARK: - Set UI Components
@@ -219,8 +257,9 @@ class SignUpSignInVC: UIViewController {
     private func setFormStackView() {
         view.addSubview(signInFormStackView)
         
-        signInFormStackView.addArrangedSubview(emailTextField)
-        signInFormStackView.addArrangedSubview(passwordTextField)
+        signInFormStackView.addArrangedSubview(signInEmailTextField)
+        signInFormStackView.addArrangedSubview(signInPasswordTextField)
+        signInFormStackView.addArrangedSubview(signInButton)
         
         NSLayoutConstraint.activate([
             signInFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -237,9 +276,19 @@ class SignUpSignInVC: UIViewController {
         passwordFunctionalityStackView.addArrangedSubview(forgetPasswordLabel)
     }
     
-    private func setSignInButton() {
-        signInFormStackView.addArrangedSubview(signInButton)
+    private func setSignUpStackView() {
+        view.addSubview(signUpFormStackView)
         
+        signUpFormStackView.addArrangedSubview(signUpEmailTextField)
+        signUpFormStackView.addArrangedSubview(signUpPasswordTextField)
+        signUpFormStackView.addArrangedSubview(signUpPasswordConfirmTextField)
+        signUpFormStackView.addArrangedSubview(signUpButton)
+        
+        NSLayoutConstraint.activate([
+            signUpFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            signUpFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            signUpFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+        ])
     }
     
     //MARK: - UI Updates
@@ -258,11 +307,13 @@ class SignUpSignInVC: UIViewController {
     private func logInSegmentChose() {
         titleLabel.text = LabelValues.Scenes.SignInSignUp.logIn
         signInFormStackView.isHidden = false
+        signUpFormStackView.isHidden = true
     }
     
     private func signUpSegmentChose() {
         titleLabel.text = LabelValues.Scenes.SignInSignUp.signUp
         signInFormStackView.isHidden = true
+        signUpFormStackView.isHidden = false
     }
     
     //MARK: - Animations
@@ -287,6 +338,6 @@ extension SignUpSignInVC {
         static let textFieldPadding: CGFloat = 16
         static let verticalStackViewSpacing: CGFloat = 20
         static let horizontalStackViewSpacing: CGFloat = 4
-        static let checkBoxCornerRadius: CGFloat = 4
+        static let buttonCornerRadius: CGFloat = 4
     }
 }
