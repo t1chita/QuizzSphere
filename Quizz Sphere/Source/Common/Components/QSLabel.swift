@@ -8,9 +8,10 @@
 import UIKit
 
 final class QSLabel: UILabel {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setDefaultProperties()
+
+    init() {
+        super.init(frame: .zero)
+        setQSLabel()
     }
     
     required init?(coder: NSCoder) {
@@ -18,17 +19,17 @@ final class QSLabel: UILabel {
     }
     
     public func configure(with text: String?,
-                          fontType: AppConstants.FontType = .bold,
+                          fontType: AppConstants.Font.FontType = .bold,
                           textAlignment: NSTextAlignment = .center,
                           textColor: UIColor = .primaryText) {
         
         switch fontType {
         case .regular:
-            self.font = UIFont(name: "EBGaramond-Regular", size: Constants.regularFontSize)
+            self.font = AppConstants.Font.EBGaramond.regular
         case .semiBold:
-            self.font = UIFont(name: "EBGaramond-SemiBold", size: Constants.semiBoldFontSize)
+            self.font = AppConstants.Font.EBGaramond.semibold
         case .bold:
-            self.font = UIFont(name: "EBGaramond-Bold", size: Constants.boldFontSize)
+            self.font = AppConstants.Font.EBGaramond.bold
         }
         
         self.textColor = textColor
@@ -38,15 +39,7 @@ final class QSLabel: UILabel {
         self.text = text
     }
     
-    private func setDefaultProperties() {
+    private func setQSLabel() {
         self.translatesAutoresizingMaskIntoConstraints = false
-    }
-}
-
-extension QSLabel {
-    enum Constants {
-        static let boldFontSize: CGFloat = 24
-        static let semiBoldFontSize: CGFloat = 18
-        static let regularFontSize: CGFloat = 16
     }
 }

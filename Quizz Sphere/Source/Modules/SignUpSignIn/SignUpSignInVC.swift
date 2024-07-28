@@ -16,7 +16,7 @@ class SignUpSignInVC: UIViewController {
     //MARK: - UIComponents
     private lazy var titleLabel: QSLabel = {
         let label = QSLabel()
-        label.configure(with: "Login")
+        label.configure(with: LabelValues.Scenes.SignInSignUp.logIn)
         return label
     }()
     
@@ -30,17 +30,21 @@ class SignUpSignInVC: UIViewController {
     private lazy var segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(frame: .zero)
         //Insert Segments
-        segmentedControl.insertSegment(withTitle: "Log In", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "Sign Up", at: 1, animated: false)
+        segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.logIn,
+                                       at: 0,
+                                       animated: false)
+        segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.signUp,
+                                       at: 1,
+                                       animated: false)
         
         //Set Segments Titles
         segmentedControl.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel,
-            NSAttributedString.Key.font:  UIFont(name: "EBGaramond-Bold", size: Constants.segmentTitleFontSize) as Any], for: .normal)
+            NSAttributedString.Key.font:  AppConstants.Font.EBGaramond.bold as Any], for: .normal)
         
         segmentedControl.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.customCardColors,
-            NSAttributedString.Key.font: UIFont(name: "EBGaramond-Bold", size: Constants.segmentTitleFontSize) as Any], for: .selected)
+            NSAttributedString.Key.font: AppConstants.Font.EBGaramond.bold as Any], for: .selected)
         
         //Set SegmentedControl Colors To Clear
         segmentedControl.selectedSegmentTintColor = .clear
@@ -67,7 +71,63 @@ class SignUpSignInVC: UIViewController {
         return bottomUnderlineView.leftAnchor.constraint(equalTo: segmentedControl.leftAnchor)
     }()
     
+    private lazy var signInFormStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = Constants.verticalStackViewSpacing
+        return stackView
+    }()
     
+    private lazy var emailTextField: QSTextField = {
+        let emailTextField = QSTextField()
+        emailTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                 iconName: AppConstants.Images.SystemNames.emailIcon,
+                                 placeHolder: LabelValues.Scenes.SignInSignUp.emailPlaceHolder)
+        return emailTextField
+    }()
+    
+    private lazy var passwordTextField: QSTextField = {
+        let passwordTextField = QSTextField()
+        passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                    iconName: AppConstants.Images.SystemNames.passwordIcon,
+                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder)
+        return passwordTextField
+    }()
+    
+    private lazy var passwordFunctionalityStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        stackView.spacing = Constants.horizontalStackViewSpacing
+        return stackView
+    }()
+    
+    private lazy var checkBoxButton: QSCheckBoxButton = {
+        let button = QSCheckBoxButton()
+        button.configure(withCornerRadius: Constants.checkBoxCornerRadius)
+        return button
+    }()
+    
+    private lazy var rememberPasswordLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.SignInSignUp.rememberPassword,
+                        fontType: .regular,
+                        textAlignment: .left)
+        return label
+    }()
+    
+    private lazy var forgetPasswordLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.SignInSignUp.forgotPassword,
+                        fontType: .regular,
+                        textAlignment: .right,
+                        textColor: .blue)
+        return label
+    }()
     //MARK: - Initialisation
     init(signUpSignInViewModel: SignUpSignInViewModel) {
         self.signUpSignInViewModel = signUpSignInViewModel
@@ -93,6 +153,8 @@ class SignUpSignInVC: UIViewController {
         setSegmentedControlContainerView()
         setSegmentedControl()
         setBottomUnderLineView()
+        setFormStackView()
+        setPasswordFunctionalityStackView()
     }
     
     //MARK: - Set UI Components
@@ -144,6 +206,27 @@ class SignUpSignInVC: UIViewController {
         ])
     }
     
+    private func setFormStackView() {
+        view.addSubview(signInFormStackView)
+        
+        signInFormStackView.addArrangedSubview(emailTextField)
+        signInFormStackView.addArrangedSubview(passwordTextField)
+        
+        NSLayoutConstraint.activate([
+            signInFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            signInFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            signInFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+        ])
+    }
+    
+    private func setPasswordFunctionalityStackView() {
+        signInFormStackView.addArrangedSubview(passwordFunctionalityStackView)
+        
+        passwordFunctionalityStackView.addArrangedSubview(checkBoxButton)
+        passwordFunctionalityStackView.addArrangedSubview(rememberPasswordLabel)
+        passwordFunctionalityStackView.addArrangedSubview(forgetPasswordLabel)
+    }
+    
     //MARK: - UI Updates
     private func segmentedValueChanged() {
         changeSegmentedControlLinePosition()
@@ -158,11 +241,13 @@ class SignUpSignInVC: UIViewController {
     }
     
     private func logInSegmentChose() {
-        titleLabel.text = "Log In"
+        titleLabel.text = LabelValues.Scenes.SignInSignUp.logIn
+        signInFormStackView.isHidden = false
     }
     
     private func signUpSegmentChose() {
-        titleLabel.text = "Sign Up"
+        titleLabel.text = LabelValues.Scenes.SignInSignUp.signUp
+        signInFormStackView.isHidden = true
     }
     
     //MARK: - Animations
@@ -184,5 +269,9 @@ extension SignUpSignInVC {
     
     enum Constants {
         static let segmentTitleFontSize: CGFloat = 18
+        static let textFieldPadding: CGFloat = 16
+        static let verticalStackViewSpacing: CGFloat = 20
+        static let horizontalStackViewSpacing: CGFloat = 4
+        static let checkBoxCornerRadius: CGFloat = 4
     }
 }
