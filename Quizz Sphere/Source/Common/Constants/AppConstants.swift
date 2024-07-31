@@ -33,6 +33,7 @@ public enum AppConstants {
             static let emailIcon: String = "envelope"
             static let passwordIcon: String = "lock"
             static let checkMark: String = "checkmark"
+            static let person: String = "person"
         }
     }
     

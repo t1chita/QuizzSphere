@@ -8,6 +8,8 @@
 import UIKit
 
 final class QSButton: UIButton {
+    var didSendEventClosure: (() -> Void)?
+    
     init() {
         super.init(frame: .zero)
         setQSButton()
@@ -44,5 +46,8 @@ final class QSButton: UIButton {
     
     private func setQSButton() {
         translatesAutoresizingMaskIntoConstraints = false
+        addAction(UIAction(handler: { [weak self] _ in
+            self?.didSendEventClosure?()
+        }), for: .touchUpInside)
     }
 }

@@ -36,7 +36,12 @@ class SignUpSignInCoordinator: SignUpSignInCoordinatorProtocol {
         let signUpSignInViewModel: SignUpSignInViewModel = .init()
         let signUpSignInVC: SignUpSignInVC = .init(signUpSignInViewModel: signUpSignInViewModel)
         signUpSignInVC.didSendEventClosure = {[weak self] event in
-            self?.finish()
+            switch event {
+            case .login:
+                self?.finish()
+            case .signup:
+                self?.finish()
+            }
         }
         
         navigationController.pushViewController(signUpSignInVC, animated: true)

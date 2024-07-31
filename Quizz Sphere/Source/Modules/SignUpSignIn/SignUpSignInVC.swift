@@ -149,6 +149,33 @@ class SignUpSignInVC: UIViewController {
         return emailTextField
     }()
     
+    
+    private lazy var signUpEmailValidateLabel: QSLabel = {
+        let signUpEmailValidateLabel = QSLabel()
+        signUpEmailValidateLabel.configure(with: signUpSignInViewModel.isInputValid(forType: .email),
+                                           fontType: .regular,
+                                           textAlignment: .left,
+                                           textColor: .minusPoint)
+        return signUpEmailValidateLabel
+    }()
+    
+    private lazy var signUpNickNameTextField: QSTextField = {
+        let nickNameTextField = QSTextField()
+        nickNameTextField.configure(withPadding: .left(Constants.textFieldPadding),
+                                    iconName: AppConstants.Images.SystemNames.person,
+                                    placeHolder: LabelValues.Scenes.SignInSignUp.nickNamePlaceHolder)
+        return nickNameTextField
+    }()
+    
+    private lazy var signUpNickNameValidateLabel: QSLabel = {
+        let signUpNickNameValidateLabel = QSLabel()
+        signUpNickNameValidateLabel.configure(with: signUpSignInViewModel.isInputValid(forType: .nickname),
+                                              fontType: .regular,
+                                              textAlignment: .left,
+                                              textColor: .minusPoint)
+        return signUpNickNameValidateLabel
+    }()
+    
     private lazy var signUpPasswordTextField: QSTextField = {
         let passwordTextField = QSTextField()
         passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
@@ -158,13 +185,13 @@ class SignUpSignInVC: UIViewController {
         return passwordTextField
     }()
     
-    private lazy var signUpPasswordConfirmTextField: QSTextField = {
-        let passwordTextField = QSTextField()
-        passwordTextField.configure(withPadding: .left(Constants.textFieldPadding),
-                                    iconName: AppConstants.Images.SystemNames.passwordIcon,
-                                    placeHolder: LabelValues.Scenes.SignInSignUp.passwordPlaceHolder,
-                                    isSecured: true)
-        return passwordTextField
+    private lazy var signUpPasswordValidateLabel: QSLabel = {
+        let signUpPasswordValidateLabel = QSLabel()
+        signUpPasswordValidateLabel.configure(with: signUpSignInViewModel.isInputValid(forType: .password),
+                                              fontType: .regular,
+                                              textAlignment: .left,
+                                              textColor: .minusPoint)
+        return signUpPasswordValidateLabel
     }()
     
     private lazy var signUpButton: QSButton = {
@@ -261,6 +288,10 @@ class SignUpSignInVC: UIViewController {
         signInFormStackView.addArrangedSubview(signInPasswordTextField)
         signInFormStackView.addArrangedSubview(signInButton)
         
+        signInButton.didSendEventClosure = {[weak self] in
+            self?.handleLoginButtonTapped()
+        }
+        
         NSLayoutConstraint.activate([
             signInFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signInFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
@@ -280,9 +311,35 @@ class SignUpSignInVC: UIViewController {
         view.addSubview(signUpFormStackView)
         
         signUpFormStackView.addArrangedSubview(signUpEmailTextField)
+        signUpFormStackView.addArrangedSubview(signUpEmailValidateLabel)
+        signUpFormStackView.addArrangedSubview(signUpNickNameTextField)
+        signUpFormStackView.addArrangedSubview(signUpNickNameValidateLabel)
         signUpFormStackView.addArrangedSubview(signUpPasswordTextField)
-        signUpFormStackView.addArrangedSubview(signUpPasswordConfirmTextField)
+        signUpFormStackView.addArrangedSubview(signUpPasswordValidateLabel)
         signUpFormStackView.addArrangedSubview(signUpButton)
+        
+        signUpEmailValidateLabel.isHidden = true
+        signUpNickNameValidateLabel.isHidden = true
+        signUpPasswordValidateLabel.isHidden = true
+
+        signUpEmailTextField.addAction(UIAction(handler: { [weak self] _ in
+            self?.signUpSignInViewModel.signupEmail = self?.signUpEmailTextField.text ?? ""
+            self?.validateEmail()
+        }), for: .editingDidEnd)
+        
+        signUpNickNameTextField.addAction(UIAction(handler: { [weak self] _ in
+            self?.signUpSignInViewModel.signUpNickname = self?.signUpNickNameTextField.text ?? ""
+            self?.validateNickname()
+        }), for: .editingDidEnd)
+        
+        signUpPasswordTextField.addAction(UIAction(handler: { [weak self] _ in
+            self?.signUpSignInViewModel.signUpPassword = self?.signUpPasswordTextField.text ?? ""
+            self?.validatePassword()
+        }), for: .editingDidEnd)
+        
+        signUpButton.didSendEventClosure = {[weak self] in
+            self?.handleSignUpButtonTapped()
+        }
         
         NSLayoutConstraint.activate([
             signUpFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -290,6 +347,31 @@ class SignUpSignInVC: UIViewController {
             signUpFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
         ])
     }
+    
+    private func validateEmail() {
+        if signUpSignInViewModel.isEmailValid {
+            signUpEmailValidateLabel.isHidden = true
+        } else {
+            signUpEmailValidateLabel.isHidden = false
+        }
+    }
+    
+    private func validateNickname() {
+        if signUpSignInViewModel.isNicknameValid {
+            signUpNickNameValidateLabel.isHidden = true
+        } else {
+            signUpNickNameValidateLabel.isHidden = false
+        }
+    }
+    
+    private func validatePassword() {
+        if signUpSignInViewModel.isPasswordValid {
+            signUpPasswordValidateLabel.isHidden = true
+        } else {
+            signUpPasswordValidateLabel.isHidden = false
+        }
+    }
+    
     
     //MARK: - UI Updates
     private func segmentedValueChanged() {
@@ -328,9 +410,42 @@ class SignUpSignInVC: UIViewController {
     }
 }
 
+//MARK: - Actions
+extension SignUpSignInVC {
+    private func handleSignUpButtonTapped() {
+        setViewModelSignUpProperties()
+        signUpSignInViewModel.createUser {[weak self] success in
+            DispatchQueue.main.async { [weak self] in
+                switch success {
+                case true:
+                    self?.didSendEventClosure?(.signup)
+                    print("DEBUG: User Saved Successfully")
+                case false:
+                    print("DEBUG: Can't Save User")
+                }
+            }
+        }
+    }
+    
+    private func handleLoginButtonTapped() {
+        didSendEventClosure?(.login)
+        print("DEBUG: Log In")
+    }
+    
+    private func setViewModelSignUpProperties() {
+        signUpSignInViewModel.signupEmail = signUpEmailTextField.text ?? ""
+        signUpSignInViewModel.signUpNickname = signUpNickNameTextField.text ?? ""
+        signUpSignInViewModel.signUpPassword = signUpPasswordTextField.text ?? ""
+        
+        print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signupEmail), Nickname: \(signUpSignInViewModel.signUpNickname), Password: \(signUpSignInViewModel.signUpPassword)")
+    }
+}
+
+
 extension SignUpSignInVC {
     enum Event {
         case login
+        case signup
     }
     
     enum Constants {

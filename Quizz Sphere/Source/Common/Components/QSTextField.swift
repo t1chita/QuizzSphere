@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum ValidationType {
+    case email
+    case nickname
+    case password
+}
+
 final class QSTextField: UITextField {
     private lazy var bottomLine: CALayer = {
         let bottomLine = CALayer()
@@ -37,6 +43,7 @@ final class QSTextField: UITextField {
                           iconName: String,
                           placeHolder: String,
                           isSecured: Bool = false) {
+        
         let icon = UIImageView(image: UIImage(systemName: iconName))
         icon.contentMode = .scaleAspectFit
         icon.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
@@ -47,16 +54,25 @@ final class QSTextField: UITextField {
         
         switch padding {
         case .left(let spacing):
-            let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing + 16, height: frame.height + 26))
+            let leftPaddingView = UIView(frame: CGRect(x: 0,
+                                                       y: 0,
+                                                       width: spacing + 16,
+                                                       height: frame.height + 26))
             leftPaddingView.addSubview(icon)
             leftView = leftPaddingView
             leftViewMode = .always
         case .right(let spacing):
-            let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: frame.height))
+            let rightPaddingView = UIView(frame: CGRect(x: 0,
+                                                        y: 0,
+                                                        width: spacing,
+                                                        height: frame.height))
             rightView = rightPaddingView
             leftViewMode = .always
         case .equalSpacing(let spacing):
-            let equalPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: frame.height))
+            let equalPaddingView = UIView(frame: CGRect(x: 0,
+                                                        y: 0,
+                                                        width: spacing,
+                                                        height: frame.height))
             leftView = equalPaddingView
             leftViewMode = .always
             rightView = equalPaddingView

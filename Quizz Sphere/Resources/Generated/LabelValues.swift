@@ -20,6 +20,11 @@ public enum LabelValues {
             static let passwordPlaceHolder: String = "********"
             static let rememberPassword: String = "Remember Password"
             static let forgotPassword: String = "Forget Password"
+            static let nickNamePlaceHolder: String = "tem.ch1t"
+            static let emailIsValidString: String = "Email must contains @gmail.com suffix"
+            static let nicknameIsValidString: String = "Nickname must not contain #, spaces and it's length should be from 3 to 20 characters."
+            static let passwordIsValidString: String = "Password must contains special symbols, one number, one uppercased letter, and it's length should be from 9 characters."
+            static let correctInfo: String = "Correct Information"
         }
     }
 }

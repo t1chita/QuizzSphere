@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 protocol AppCoordinatorProtocol: Coordinator {
     func showLoginFlow()
@@ -27,7 +28,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     func start() {
-        showLoginFlow()
+        if Auth.auth().currentUser == nil {
+            showLoginFlow()
+        } else {
+            showMainFlow()
+        }
     }
         
     func showLoginFlow() {

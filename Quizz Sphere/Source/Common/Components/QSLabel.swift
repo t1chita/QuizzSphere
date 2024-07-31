@@ -37,6 +37,8 @@ final class QSLabel: UILabel {
         self.textAlignment = textAlignment
         
         self.text = text
+        
+        self.numberOfLines = 0
     }
     
     private func setQSLabel() {
