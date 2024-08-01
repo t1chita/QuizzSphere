@@ -26,6 +26,7 @@ class ProfileVC: UIViewController {
     //MARK: - LifeCycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .customBackground
         let button = UIButton()
         view.addSubview(button)
         button.setTitle("SignOut", for: .normal)

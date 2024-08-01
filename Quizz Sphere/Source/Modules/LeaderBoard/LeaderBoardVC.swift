@@ -23,7 +23,11 @@ class LeaderBoardVC: UIViewController {
     }
     
     //MARK: - LifeCycles
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .customBackground
+  
+    }
     //MARK: - Delegates
     
     //MARK: - Setup UI

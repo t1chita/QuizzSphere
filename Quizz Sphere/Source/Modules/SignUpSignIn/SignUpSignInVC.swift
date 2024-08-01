@@ -225,6 +225,7 @@ class SignUpSignInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        addHideKeyboardTapGestureRecogniser()
     }
     
     //MARK: - Delegates
@@ -420,6 +421,16 @@ class SignUpSignInVC: UIViewController {
             self?.view.layoutIfNeeded()
         })
     }
+    
+    //MARK: - Gestures
+    private func addHideKeyboardTapGestureRecogniser() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 //MARK: - Actions
@@ -471,6 +482,7 @@ extension SignUpSignInVC {
         print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signInEmail), Password: \(signUpSignInViewModel.signInPassword)")
     }
 }
+
 
 
 extension SignUpSignInVC {
