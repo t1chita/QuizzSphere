@@ -94,6 +94,15 @@ class SignUpSignInVC: UIViewController {
         return passwordTextField
     }()
     
+    private lazy var signInFormValidateLabel: QSLabel = {
+        let formValidateLabel = QSLabel()
+        formValidateLabel.configure(with: LabelValues.Scenes.SignInSignUp.incorrectFormInfo,
+                                    fontType: .regular,
+                                    textAlignment: .left,
+                                    textColor: .minusPoint)
+        return formValidateLabel
+    }()
+    
     private lazy var passwordFunctionalityStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -286,6 +295,7 @@ class SignUpSignInVC: UIViewController {
         
         signInFormStackView.addArrangedSubview(signInEmailTextField)
         signInFormStackView.addArrangedSubview(signInPasswordTextField)
+        signInFormStackView.addArrangedSubview(signInFormValidateLabel)
         signInFormStackView.addArrangedSubview(signInButton)
         
         signInButton.didSendEventClosure = {[weak self] in
@@ -297,6 +307,8 @@ class SignUpSignInVC: UIViewController {
             signInFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             signInFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
         ])
+        
+        signInFormValidateLabel.isHidden = true
     }
     
     private func setPasswordFunctionalityStackView() {
@@ -414,7 +426,7 @@ class SignUpSignInVC: UIViewController {
 extension SignUpSignInVC {
     private func handleSignUpButtonTapped() {
         setViewModelSignUpProperties()
-        signUpSignInViewModel.createUser {[weak self] success in
+        signUpSignInViewModel.createUser { [weak self] success in
             DispatchQueue.main.async { [weak self] in
                 switch success {
                 case true:
@@ -428,8 +440,20 @@ extension SignUpSignInVC {
     }
     
     private func handleLoginButtonTapped() {
-        didSendEventClosure?(.login)
-        print("DEBUG: Log In")
+        setViewModelSignUInProperties()
+        signUpSignInViewModel.signIn { [weak self] success in
+            DispatchQueue.main.async { [weak self] in
+                switch success {
+                case true:
+                    self?.didSendEventClosure?(.login)
+                    self?.signInFormValidateLabel.isHidden = true
+                    print("DEBUG: User Sign In Successfully")
+                case false:
+                    self?.signInFormValidateLabel.isHidden = false
+                    print("DEBUG: User Sign In UnSuccessfully")
+                }
+            }
+        }
     }
     
     private func setViewModelSignUpProperties() {
@@ -438,6 +462,13 @@ extension SignUpSignInVC {
         signUpSignInViewModel.signUpPassword = signUpPasswordTextField.text ?? ""
         
         print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signupEmail), Nickname: \(signUpSignInViewModel.signUpNickname), Password: \(signUpSignInViewModel.signUpPassword)")
+    }  
+    
+    private func setViewModelSignUInProperties() {
+        signUpSignInViewModel.signInEmail = signInEmailTextField.text ?? ""
+        signUpSignInViewModel.signInPassword = signInPasswordTextField.text ?? ""
+        
+        print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signInEmail), Password: \(signUpSignInViewModel.signInPassword)")
     }
 }
 

@@ -29,4 +29,16 @@ final class FirebaseManager {
             print("DEBUG: Failed to create user with error \(error.localizedDescription)")
         }
     }
+    
+    func signIn(withEmail email: String,
+                password: String,
+                completion:@escaping (Bool) -> Void) async throws {
+        do {
+            try await Auth.auth().signIn(withEmail: email, password: password)
+            completion(true)
+        } catch {
+            completion(false)
+            print("DEBUG: Failed to sign in user with error \(error.localizedDescription)")
+        }
+    }
 }

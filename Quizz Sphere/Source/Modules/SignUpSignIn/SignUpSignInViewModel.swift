@@ -42,7 +42,9 @@ final class SignUpSignInViewModel {
         if isEmailValid && isNicknameValid && isPasswordValid {
             print("DEBUG: Validation passed")
             Task {
-                try await FirebaseManager.shared.createUser(withEmail: signupEmail, nickName: signUpNickname, password: signUpPassword) { success in
+                try await FirebaseManager.shared.createUser(withEmail: signupEmail, 
+                                                            nickName: signUpNickname,
+                                                            password: signUpPassword) { success in
                     switch success {
                     case true:
                         completion(true)
@@ -56,5 +58,23 @@ final class SignUpSignInViewModel {
         } else {
             print("DEBUG: Validation failed - Email: \(isEmailValid), Nickname: \(isNicknameValid), Password: \(isPasswordValid)")
         }
+    }
+    
+    func signIn(completion: @escaping (Bool) -> Void) {
+        Task {
+            try await FirebaseManager.shared.signIn(withEmail: signInEmail,
+                                                    password: signInPassword) { success in
+                switch success {
+                case true:
+                    print("DEBUG: User sign in was successfully")
+                    completion(true)
+                case false :
+                    completion(false)
+                    print("DEBUG: User can't sign in")
+                }
+                
+            }
+        }
+        
     }
 }

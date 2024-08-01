@@ -25,6 +25,7 @@ public enum LabelValues {
             static let nicknameIsValidString: String = "Nickname must not contain #, spaces and it's length should be from 3 to 20 characters."
             static let passwordIsValidString: String = "Password must contains special symbols, one number, one uppercased letter, and it's length should be from 9 characters."
             static let correctInfo: String = "Correct Information"
+            static let incorrectFormInfo: String = "User's email or password is incorrect"
         }
     }
 }
