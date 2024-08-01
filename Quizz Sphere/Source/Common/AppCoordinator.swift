@@ -21,20 +21,28 @@ class AppCoordinator: AppCoordinatorProtocol {
     var childCoordinators = [Coordinator]()
     
     var type: CoordinatorType { .app }
-        
+    
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
         navigationController.setNavigationBarHidden(true, animated: true)
     }
-
+    
     func start() {
         if Auth.auth().currentUser == nil {
             showLoginFlow()
         } else {
             showMainFlow()
         }
-    }
         
+        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+            if user != nil {
+                self?.showMainFlow()
+            } else {
+                self?.showLoginFlow()
+            }
+        }
+    }
+    
     func showLoginFlow() {
         let loginCoordinator = SignUpSignInCoordinator.init(navigationController)
         loginCoordinator.finishDelegate = self
@@ -44,27 +52,27 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     func showMainFlow() {
         let tabCoordinator = TabBarCoordinator.init(navigationController)
-          tabCoordinator.finishDelegate = self
-          tabCoordinator.start()
-          childCoordinators.append(tabCoordinator)
+        tabCoordinator.finishDelegate = self
+        tabCoordinator.start()
+        childCoordinators.append(tabCoordinator)
     }
 }
 
 extension AppCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
-           childCoordinators = childCoordinators.filter({ $0.type != childCoordinator.type })
-
-           switch childCoordinator.type {
-           case .tab:
-               navigationController.viewControllers.removeAll()
-
-               showLoginFlow()
-           case .login:
-               navigationController.viewControllers.removeAll()
-
-               showMainFlow()
-           default:
-               break
-           }
-       }
+        childCoordinators = childCoordinators.filter({ $0.type != childCoordinator.type })
+        
+        switch childCoordinator.type {
+        case .tab:
+            navigationController.viewControllers.removeAll()
+            
+            showLoginFlow()
+        case .login:
+            navigationController.viewControllers.removeAll()
+            
+            showMainFlow()
+        default:
+            break
+        }
+    }
 }
