@@ -421,16 +421,6 @@ class SignUpSignInVC: UIViewController {
             self?.view.layoutIfNeeded()
         })
     }
-    
-    //MARK: - Gestures
-    private func addHideKeyboardTapGestureRecogniser() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func hideKeyboard() {
-        view.endEditing(true)
-    }
 }
 
 //MARK: - Actions

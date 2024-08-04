@@ -28,6 +28,9 @@
 		26594A442C55B3A1008C6D04 /* QSCheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */; };
 		26594A462C55CADB008C6D04 /* QSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A452C55CADB008C6D04 /* QSButton.swift */; };
 		268023CA2C5934FC0099ECA3 /* ValidationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023C92C5934FC0099ECA3 /* ValidationManager.swift */; };
+		268023D12C5B60610099ECA3 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023D02C5B60610099ECA3 /* UIViewController.swift */; };
+		268023D32C5B78890099ECA3 /* QSHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023D22C5B78890099ECA3 /* QSHorizontalStackView.swift */; };
+		268023D52C5B7A3D0099ECA3 /* GreetingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023D42C5B7A3D0099ECA3 /* GreetingManager.swift */; };
 		268DCB3E2C51A28F000995A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3D2C51A28F000995A4 /* AppDelegate.swift */; };
 		268DCB402C51A28F000995A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */; };
 		268DCB482C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 268DCB462C51A28F000995A4 /* Quizz_Sphere.xcdatamodeld */; };
@@ -82,6 +85,9 @@
 		26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSCheckBoxButton.swift; sourceTree = "<group>"; };
 		26594A452C55CADB008C6D04 /* QSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSButton.swift; sourceTree = "<group>"; };
 		268023C92C5934FC0099ECA3 /* ValidationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationManager.swift; sourceTree = "<group>"; };
+		268023D02C5B60610099ECA3 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		268023D22C5B78890099ECA3 /* QSHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSHorizontalStackView.swift; sourceTree = "<group>"; };
+		268023D42C5B7A3D0099ECA3 /* GreetingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetingManager.swift; sourceTree = "<group>"; };
 		268DCB3A2C51A28F000995A4 /* Quizz Sphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quizz Sphere.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		268DCB3D2C51A28F000995A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		268DCB3F2C51A28F000995A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,8 +151,9 @@
 		2620651A2C56982C00484B3F /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				268023CB2C5937C50099ECA3 /* Validation */,
+				268023C92C5934FC0099ECA3 /* ValidationManager.swift */,
 				2620651B2C56983D00484B3F /* FirebaseManager.swift */,
+				268023D42C5B7A3D0099ECA3 /* GreetingManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -165,14 +172,6 @@
 				26594A412C55A08A008C6D04 /* LabelValues.swift */,
 			);
 			path = Generated;
-			sourceTree = "<group>";
-		};
-		268023CB2C5937C50099ECA3 /* Validation */ = {
-			isa = PBXGroup;
-			children = (
-				268023C92C5934FC0099ECA3 /* ValidationManager.swift */,
-			);
-			path = Validation;
 			sourceTree = "<group>";
 		};
 		268DCB312C51A28F000995A4 = {
@@ -329,6 +328,7 @@
 				26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */,
 				26594A452C55CADB008C6D04 /* QSButton.swift */,
 				262065182C56938300484B3F /* QSVerticalStackView.swift */,
+				268023D22C5B78890099ECA3 /* QSHorizontalStackView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -346,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				268DCB852C51ABBC000995A4 /* IntExtensions.swift */,
+				268023D02C5B60610099ECA3 /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -548,7 +549,9 @@
 				26594A442C55B3A1008C6D04 /* QSCheckBoxButton.swift in Sources */,
 				26594A422C55A08A008C6D04 /* LabelValues.swift in Sources */,
 				268023CA2C5934FC0099ECA3 /* ValidationManager.swift in Sources */,
+				268023D12C5B60610099ECA3 /* UIViewController.swift in Sources */,
 				268DCBA12C51D468000995A4 /* LeaderBoardViewModel.swift in Sources */,
+				268023D32C5B78890099ECA3 /* QSHorizontalStackView.swift in Sources */,
 				268DCBA52C51D479000995A4 /* ProfileViewModel.swift in Sources */,
 				268DCB862C51ABBC000995A4 /* IntExtensions.swift in Sources */,
 				268DCB3E2C51A28F000995A4 /* AppDelegate.swift in Sources */,
@@ -568,6 +571,7 @@
 				268DCBA32C51D470000995A4 /* ProfileVC.swift in Sources */,
 				268DCB8B2C51AC2D000995A4 /* SignUpSignInViewModel.swift in Sources */,
 				268DCB9F2C51D45E000995A4 /* LeaderBoardVC.swift in Sources */,
+				268023D52C5B7A3D0099ECA3 /* GreetingManager.swift in Sources */,
 				268DCB952C51C1BE000995A4 /* HomeVC.swift in Sources */,
 				268DCB902C51C0AA000995A4 /* TabBarVC.swift in Sources */,
 				268DCB402C51A28F000995A4 /* SceneDelegate.swift in Sources */,
