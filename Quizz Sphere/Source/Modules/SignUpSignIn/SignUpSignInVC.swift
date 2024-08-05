@@ -43,7 +43,7 @@ class SignUpSignInVC: UIViewController {
             NSAttributedString.Key.font:  AppConstants.Font.EBGaramond.bold as Any], for: .normal)
         
         segmentedControl.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.customCardColors,
+            NSAttributedString.Key.foregroundColor: UIColor.blueCard,
             NSAttributedString.Key.font: AppConstants.Font.EBGaramond.bold as Any], for: .selected)
         
         //Set SegmentedControl Colors To Clear
@@ -62,7 +62,7 @@ class SignUpSignInVC: UIViewController {
     
     private lazy var bottomUnderlineView: UIView = {
         let underlineView = UIView()
-        underlineView.backgroundColor = .customCardColors
+        underlineView.backgroundColor = .blueCard
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         return underlineView
     }()

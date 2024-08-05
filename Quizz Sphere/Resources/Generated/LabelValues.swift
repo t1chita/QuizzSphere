@@ -26,10 +26,14 @@ public enum LabelValues {
             static let passwordIsValidString: String = "Password must contains special symbols, one number, one uppercased letter, and it's length should be from 9 characters."
             static let correctInfo: String = "Correct Information"
             static let incorrectFormInfo: String = "User's email or password is incorrect"
+        }
+        
+        public enum Home {
             static let goodMorning: String = "☀️ Good Morning"
             static let goodEvening: String = "🌙 Good Evening"
             static let goodAfternoon: String = "🌇 Good Afternoon"
             static let greeting: String = "Hello"
+            static let currentQuizz: String = "Recent Quizz"
         }
     }
 }

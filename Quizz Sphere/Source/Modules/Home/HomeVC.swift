@@ -26,12 +26,10 @@ class HomeVC: UIViewController {
         return contentView
     }()
     
-    private lazy var greetingCardView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = Constants.greetingCardCornerRadius
-        view.layer.masksToBounds = false
-        view.backgroundColor = .customCardColors
+    private lazy var greetingCardView: QSCard = {
+        let view = QSCard()
+        view.configure(withCornerRadius: Constants.cardCornerRadius,
+                       backgroundColor: .blueCard)
         return view
     }()
     
@@ -73,6 +71,63 @@ class HomeVC: UIViewController {
                         textColor: .primaryText)
         return label
     }()
+    
+    private lazy var currentQuizzCard: QSCard = {
+        let card = QSCard()
+        card.configure(withCornerRadius: Constants.cardCornerRadius,
+                       backgroundColor: .pinkCard)
+        return card
+    }()
+    
+    private lazy var currentQuizzHorizontalStackView: QSHorizontalStackView = {
+        let stackView = QSHorizontalStackView()
+        return stackView
+    }()
+    
+    private lazy var currentQuizzVerticalStackView: QSVerticalStackView = {
+        let stackView = QSVerticalStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    
+    private lazy var currentQuizzLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.Home.currentQuizz,
+                        fontType: .regular,
+                        textAlignment: .left,
+                        textColor: .blueCard)
+        return label
+    }()
+    
+    private lazy var currentQuizzName: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: "Math And Science Quizz",
+                        fontType: .semiBold,
+                        textAlignment: .left,
+                        textColor: .primaryText)
+        return label
+    }()
+    
+    private lazy var progressCircle: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.backgroundColor = .customBackground
+        return view
+    }()
+    
+    private lazy var progressPercentLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: "65%",
+                        fontType: .semiBold,
+                        textAlignment: .center,
+                        textColor: .primaryText)
+        return label
+    }()
+    
+    
     //MARK: - Initialisation
     init(homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
@@ -102,6 +157,12 @@ class HomeVC: UIViewController {
         setGreetingCardView()
         setGreetingHorizontalStackView()
         setGreetingHorizontalStackViewContent()
+        
+        setCurrentQuizzCard()
+        setCurrentQuizzHorizontalStackView()
+        setCurrentQuizzHorizontalStackViewContent()
+        setCurrentQuizzVerticalStackView()
+        setProgressCircle()
     }
     
     //MARK: - Set UI Components
@@ -159,16 +220,62 @@ class HomeVC: UIViewController {
         greetingVerticalStackView.addArrangedSubview(userNameLabel)
         
         greetingHorizontalStackView.addArrangedSubview(greetingVerticalStackView)
+        greetingHorizontalStackView.addArrangedSubview(userProfileImage)
+        
         NSLayoutConstraint.activate([
             userProfileImage.widthAnchor.constraint(equalToConstant: 60),
             userProfileImage.heightAnchor.constraint(equalToConstant: 60),
         ])
-        greetingHorizontalStackView.addArrangedSubview(userProfileImage)
+    }
+    
+    private func setCurrentQuizzCard() {
+        containerView.addSubview(currentQuizzCard)
+        
+        NSLayoutConstraint.activate([
+            currentQuizzCard.topAnchor.constraint(equalTo: greetingCardView.bottomAnchor, constant: 40),
+            currentQuizzCard.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
+            currentQuizzCard.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            currentQuizzCard.heightAnchor.constraint(equalToConstant: 90)
+        ])
+    }
+    
+    private func setCurrentQuizzHorizontalStackView() {
+        currentQuizzCard.addSubview(currentQuizzHorizontalStackView)
+        
+        NSLayoutConstraint.activate([
+            currentQuizzHorizontalStackView.topAnchor.constraint(equalTo: currentQuizzCard.topAnchor, constant: 20),
+            currentQuizzHorizontalStackView.leadingAnchor.constraint(equalTo: currentQuizzCard.leadingAnchor, constant: 20),
+            currentQuizzHorizontalStackView.trailingAnchor.constraint(equalTo: currentQuizzCard.trailingAnchor, constant: -20),
+            currentQuizzHorizontalStackView.bottomAnchor.constraint(equalTo: currentQuizzCard.bottomAnchor, constant: -20),
+        ])
+    }
+    
+    private func setCurrentQuizzHorizontalStackViewContent() {
+        currentQuizzHorizontalStackView.addArrangedSubview(currentQuizzVerticalStackView)
+        currentQuizzHorizontalStackView.addArrangedSubview(progressCircle)
+        
+        
+    }
+    
+    private func setCurrentQuizzVerticalStackView() {
+        currentQuizzVerticalStackView.addArrangedSubview(currentQuizzLabel)
+        currentQuizzVerticalStackView.addArrangedSubview(currentQuizzName)
+    }
+    
+    private func setProgressCircle() {
+        progressCircle.addSubview(progressPercentLabel)
+
+        NSLayoutConstraint.activate([
+            progressCircle.widthAnchor.constraint(equalToConstant: 50),
+            progressCircle.heightAnchor.constraint(equalToConstant: 50),
+            progressPercentLabel.centerXAnchor.constraint(equalTo: progressCircle.centerXAnchor),
+            progressPercentLabel.centerYAnchor.constraint(equalTo: progressCircle.centerYAnchor),
+        ])
     }
 }
 
 extension HomeVC {
     enum Constants {
-        static let greetingCardCornerRadius: CGFloat = 10
+        static let cardCornerRadius: CGFloat = 10
     }
 }

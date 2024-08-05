@@ -23,7 +23,7 @@ final class QSButton: UIButton {
                           fontType: AppConstants.Font.FontType = .bold,
                           contentAlignment: ContentHorizontalAlignment = .center,
                           textColor: UIColor = .primaryText,
-                          backgroundColor: UIColor = .customCardColors,
+                          backgroundColor: UIColor = .blueCard,
                           cornerRadius: CGFloat) {
         setTitle(text, for: .normal)
         setTitleColor(textColor, for: .normal)
