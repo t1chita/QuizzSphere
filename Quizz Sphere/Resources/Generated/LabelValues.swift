@@ -33,7 +33,12 @@ public enum LabelValues {
             static let goodEvening: String = "🌙 Good Evening"
             static let goodAfternoon: String = "🌇 Good Afternoon"
             static let greeting: String = "Hello"
-            static let currentQuizz: String = "Recent Quizz"
+            static let currentQuizz: String = "Recent Quiz"
+            static let liveQuizzes: String = "Live Quizzes"
+            static let seeAll: String = "See All"
+            static let noName: String = "Unknown Name"
+            static let noCategory: String = "Unknown Category"
+            static let noQuantity: String = "Unknown Quantity"
         }
     }
 }

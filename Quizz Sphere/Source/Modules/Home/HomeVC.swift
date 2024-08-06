@@ -9,7 +9,7 @@ import UIKit
 
 class HomeVC: UIViewController {
     //MARK: - Properties
-    private var homeViewModel: HomeViewModel
+    var homeViewModel: HomeViewModel
     
     //MARK: - UIComponents
     private lazy var scrollView: UIScrollView = {
@@ -28,7 +28,7 @@ class HomeVC: UIViewController {
     
     private lazy var greetingCardView: QSCard = {
         let view = QSCard()
-        view.configure(withCornerRadius: Constants.cardCornerRadius,
+        view.configure(withCornerRadius: Constants.cardSmallCornerRadius,
                        backgroundColor: .blueCard)
         return view
     }()
@@ -74,7 +74,7 @@ class HomeVC: UIViewController {
     
     private lazy var currentQuizzCard: QSCard = {
         let card = QSCard()
-        card.configure(withCornerRadius: Constants.cardCornerRadius,
+        card.configure(withCornerRadius: Constants.cardSmallCornerRadius,
                        backgroundColor: .pinkCard)
         return card
     }()
@@ -127,6 +127,49 @@ class HomeVC: UIViewController {
         return label
     }()
     
+    private lazy var quizSheet: QSCard = {
+        let view = QSCard()
+        view.configure(withCornerRadius: Constants.cardMediumCornerRadius,
+                       backgroundColor: .blueCard)
+        return view
+    }()
+    
+    private lazy var quizSheetHeaderStackView: QSHorizontalStackView = {
+        let stackView = QSHorizontalStackView()
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private lazy var quizSheetTitleLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.Home.liveQuizzes,
+                        fontType: .bold,
+                        textAlignment: .left,
+                        textColor: .primaryText)
+        return label
+    }()
+    
+    private lazy var seeAllButton: QSButton = {
+        let button = QSButton()
+        button.configure(with: LabelValues.Scenes.Home.seeAll,
+                         fontType: .regular,
+                         contentAlignment: .right,
+                         textColor: .pinkCard,
+                         cornerRadius: 0)
+        return button
+    }()
+    
+    private lazy var quizTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(QuizCell.self, forCellReuseIdentifier: QuizCell.identifier)
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .clear
+        tableView.rowHeight = 100
+        return tableView
+    }()
     
     //MARK: - Initialisation
     init(homeViewModel: HomeViewModel) {
@@ -143,6 +186,7 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         addHideKeyboardTapGestureRecogniser()
+        setupBindings()
     }
     
     //MARK: - Delegates
@@ -163,6 +207,10 @@ class HomeVC: UIViewController {
         setCurrentQuizzHorizontalStackViewContent()
         setCurrentQuizzVerticalStackView()
         setProgressCircle()
+        
+        setQuizSheet()
+        setQuizSheetHeaderStackView()
+        setQuizTableView()
     }
     
     //MARK: - Set UI Components
@@ -264,7 +312,7 @@ class HomeVC: UIViewController {
     
     private func setProgressCircle() {
         progressCircle.addSubview(progressPercentLabel)
-
+        
         NSLayoutConstraint.activate([
             progressCircle.widthAnchor.constraint(equalToConstant: 50),
             progressCircle.heightAnchor.constraint(equalToConstant: 50),
@@ -272,10 +320,57 @@ class HomeVC: UIViewController {
             progressPercentLabel.centerYAnchor.constraint(equalTo: progressCircle.centerYAnchor),
         ])
     }
+    
+    private func setQuizSheet() {
+        containerView.addSubview(quizSheet)
+        
+        NSLayoutConstraint.activate([
+            quizSheet.topAnchor.constraint(equalTo: currentQuizzCard.bottomAnchor, constant: 100),
+            quizSheet.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            quizSheet.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            quizSheet.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+    }
+    
+    private func setQuizSheetHeaderStackView() {
+        quizSheet.addSubview(quizSheetHeaderStackView)
+        
+        quizSheetHeaderStackView.addArrangedSubview(quizSheetTitleLabel)
+        quizSheetHeaderStackView.addArrangedSubview(seeAllButton)
+        
+        NSLayoutConstraint.activate([
+            quizSheetHeaderStackView.topAnchor.constraint(equalTo: quizSheet.topAnchor, constant: 24),
+            quizSheetHeaderStackView.leadingAnchor.constraint(equalTo: quizSheet.leadingAnchor, constant: 24),
+            quizSheetHeaderStackView.trailingAnchor.constraint(equalTo: quizSheet.trailingAnchor, constant: -24),
+            quizSheetHeaderStackView.heightAnchor.constraint(equalToConstant: 20),
+        ])
+    }
+    
+    private func setQuizTableView() {
+        quizSheet.addSubview(quizTableView)
+        
+        NSLayoutConstraint.activate([
+            quizTableView.topAnchor.constraint(equalTo: quizSheetHeaderStackView.bottomAnchor, constant: 20),
+            quizTableView.leadingAnchor.constraint(equalTo: quizSheet.leadingAnchor),
+            quizTableView.trailingAnchor.constraint(equalTo: quizSheet.trailingAnchor),
+            quizTableView.bottomAnchor.constraint(equalTo: quizSheet.bottomAnchor),
+        ])
+    }
+}
+
+extension HomeVC {
+    func setupBindings() {
+        homeViewModel.onQuizzesChanged = { [weak self] in
+            DispatchQueue.main.async {
+                self?.quizTableView.reloadData()
+            }
+        }
+    }
 }
 
 extension HomeVC {
     enum Constants {
-        static let cardCornerRadius: CGFloat = 10
+        static let cardSmallCornerRadius: CGFloat = 10
+        static let cardMediumCornerRadius: CGFloat = 30
     }
 }

@@ -41,4 +41,26 @@ final class FirebaseManager {
             print("DEBUG: Failed to sign in user with error \(error.localizedDescription)")
         }
     }
+    
+    func getQuizzes(completion: @escaping ([Quiz]?, Error?) -> Void) {
+        Firestore.firestore().collection("quizzes").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("DEBUG: Error getting quizzes: \(error.localizedDescription)")
+                completion(nil, error)
+            } else {
+                var quizzes: [Quiz] = []
+                if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        do {
+                            let quiz = try document.data(as: Quiz.self)
+                            quizzes.append(quiz)
+                        } catch {
+                            print("DEBUG: Error decoding quiz: \(error.localizedDescription)")
+                        }
+                    }
+                }
+                completion(quizzes, nil)
+            }
+        }
+    }
 }
