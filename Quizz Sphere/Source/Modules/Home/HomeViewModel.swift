@@ -16,10 +16,16 @@ class HomeViewModel {
         quizzes.count
     }
     
-    var onQuizzesChanged: (() -> Void)?
+    var quizSheetAnimate: Bool = false
+    
+    var onQuizzesChanged: (() -> Void)?    
     
     init() {
         getQuizzes()
+    }
+    
+    func toggleQuizSheetAnimate() {
+        quizSheetAnimate.toggle()
     }
     
     private func getQuizzes() {

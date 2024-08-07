@@ -18,7 +18,7 @@ final class QSCard: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(withCornerRadius cornerRadius: CGFloat,
+    public func configure(withCornerRadius cornerRadius: CGFloat = 0,
                           backgroundColor color: UIColor) {
         self.backgroundColor = color
         self.layer.cornerRadius = cornerRadius

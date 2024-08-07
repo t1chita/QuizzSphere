@@ -441,7 +441,7 @@ extension SignUpSignInVC {
     }
     
     private func handleLoginButtonTapped() {
-        setViewModelSignUInProperties()
+        setViewModelSignInProperties()
         signUpSignInViewModel.signIn { [weak self] success in
             DispatchQueue.main.async { [weak self] in
                 switch success {
@@ -465,7 +465,7 @@ extension SignUpSignInVC {
         print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signupEmail), Nickname: \(signUpSignInViewModel.signUpNickname), Password: \(signUpSignInViewModel.signUpPassword)")
     }  
     
-    private func setViewModelSignUInProperties() {
+    private func setViewModelSignInProperties() {
         signUpSignInViewModel.signInEmail = signInEmailTextField.text ?? ""
         signUpSignInViewModel.signInPassword = signInPasswordTextField.text ?? ""
         

@@ -44,6 +44,7 @@ final class FirebaseManager {
     
     func getQuizzes(completion: @escaping ([Quiz]?, Error?) -> Void) {
         Firestore.firestore().collection("quizzes").getDocuments { (snapshot, error) in
+            
             if let error = error {
                 print("DEBUG: Error getting quizzes: \(error.localizedDescription)")
                 completion(nil, error)
@@ -60,6 +61,26 @@ final class FirebaseManager {
                     }
                 }
                 completion(quizzes, nil)
+            }
+        }
+    }
+    
+    func fetchUser(completion: @escaping (User) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Firestore.firestore().collection("users").document(uid).getDocument { (documentSnapshot, error) in
+            
+            
+            guard let document = documentSnapshot else {
+                print("DEBUG: Error fetching user data: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            do {
+                let user = try document.data(as: User.self)
+                completion(user)
+            } catch {
+                print("DEBUG: Error decoding user data: \(error.localizedDescription)")
             }
         }
     }

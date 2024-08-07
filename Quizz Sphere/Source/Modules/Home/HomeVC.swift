@@ -11,21 +11,9 @@ class HomeVC: UIViewController {
     //MARK: - Properties
     var homeViewModel: HomeViewModel
     
+    private var quizSheetTopConstraint: NSLayoutConstraint?
+    
     //MARK: - UIComponents
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
-    
-    private lazy var containerView: UIView = {
-        let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        return contentView
-    }()
-    
     private lazy var greetingCardView: QSCard = {
         let view = QSCard()
         view.configure(withCornerRadius: Constants.cardSmallCornerRadius,
@@ -65,7 +53,7 @@ class HomeVC: UIViewController {
     
     private lazy var userNameLabel: QSLabel = {
         let label = QSLabel()
-        label.configure(with: "Temur Chitashvili",
+        label.configure(with: "",
                         fontType: .bold,
                         textAlignment: .left,
                         textColor: .primaryText)
@@ -129,8 +117,7 @@ class HomeVC: UIViewController {
     
     private lazy var quizSheet: QSCard = {
         let view = QSCard()
-        view.configure(withCornerRadius: Constants.cardMediumCornerRadius,
-                       backgroundColor: .blueCard)
+        view.configure(backgroundColor: .blueCard)
         return view
     }()
     
@@ -162,7 +149,8 @@ class HomeVC: UIViewController {
     private lazy var quizTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(QuizCell.self, forCellReuseIdentifier: QuizCell.identifier)
+        tableView.register(QuizCell.self,
+                           forCellReuseIdentifier: QuizCell.identifier)
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
@@ -189,14 +177,16 @@ class HomeVC: UIViewController {
         setupBindings()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        quizSheet.round(corners: [.topLeft, .topRight],
+                        radius: Constants.cardMediumCornerRadius)
+    }
     //MARK: - Delegates
     
     //MARK: - Setup UI
     private func setupUI() {
         setupMainView()
-        
-        setScrollView()
-        setContentView()
         
         setGreetingCardView()
         setGreetingHorizontalStackView()
@@ -218,36 +208,13 @@ class HomeVC: UIViewController {
         view.backgroundColor = .customBackground
     }
     
-    private func setScrollView() {
-        view.addSubview(scrollView)
-        
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-    }
-    
-    private func setContentView() {
-        scrollView.addSubview(containerView)
-        
-        NSLayoutConstraint.activate([
-            containerView.widthAnchor.constraint(equalToConstant: view.frame.width),
-            containerView.heightAnchor.constraint(equalToConstant:view.frame.height),
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-        ])
-    }
-    
     private func setGreetingCardView() {
-        containerView.addSubview(greetingCardView)
+        view.addSubview(greetingCardView)
         
         NSLayoutConstraint.activate([
-            greetingCardView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            greetingCardView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            greetingCardView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            greetingCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            greetingCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            greetingCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             greetingCardView.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
@@ -277,12 +244,12 @@ class HomeVC: UIViewController {
     }
     
     private func setCurrentQuizzCard() {
-        containerView.addSubview(currentQuizzCard)
+        view.addSubview(currentQuizzCard)
         
         NSLayoutConstraint.activate([
             currentQuizzCard.topAnchor.constraint(equalTo: greetingCardView.bottomAnchor, constant: 40),
-            currentQuizzCard.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            currentQuizzCard.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            currentQuizzCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            currentQuizzCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             currentQuizzCard.heightAnchor.constraint(equalToConstant: 90)
         ])
     }
@@ -322,13 +289,15 @@ class HomeVC: UIViewController {
     }
     
     private func setQuizSheet() {
-        containerView.addSubview(quizSheet)
+        view.addSubview(quizSheet)
+        
+        quizSheetTopConstraint = quizSheet.topAnchor.constraint(equalTo: currentQuizzCard.bottomAnchor, constant: 140)
+        quizSheetTopConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            quizSheet.topAnchor.constraint(equalTo: currentQuizzCard.bottomAnchor, constant: 100),
-            quizSheet.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            quizSheet.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            quizSheet.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            quizSheet.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            quizSheet.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            quizSheet.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
     
@@ -337,6 +306,10 @@ class HomeVC: UIViewController {
         
         quizSheetHeaderStackView.addArrangedSubview(quizSheetTitleLabel)
         quizSheetHeaderStackView.addArrangedSubview(seeAllButton)
+        
+        seeAllButton.didSendEventClosure = {[weak self] in
+            self?.handleSeeAllButton()
+        }
         
         NSLayoutConstraint.activate([
             quizSheetHeaderStackView.topAnchor.constraint(equalTo: quizSheet.topAnchor, constant: 24),
@@ -356,13 +329,41 @@ class HomeVC: UIViewController {
             quizTableView.bottomAnchor.constraint(equalTo: quizSheet.bottomAnchor),
         ])
     }
+    
+    //MARK: - Animations
+    private func animateQuizSheet() {
+        //TODO: - Fix Animation
+        quizSheetTopConstraint?.constant = homeViewModel.quizSheetAnimate ? -50 : 140
+        
+        seeAllButton.setTitle(homeViewModel.quizSheetAnimate ? LabelValues.Scenes.Home.seeLess : LabelValues.Scenes.Home.seeAll,
+                              for: .normal)
+        
+        UIView.animate(withDuration: 0.3,
+                       animations: {[weak self] in
+            
+            self?.view.layoutIfNeeded()
+        })
+    }
+}
+
+extension HomeVC {
+    private func handleSeeAllButton() {
+        homeViewModel.toggleQuizSheetAnimate()
+        animateQuizSheet()
+    }
 }
 
 extension HomeVC {
     func setupBindings() {
         homeViewModel.onQuizzesChanged = { [weak self] in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 self?.quizTableView.reloadData()
+            }
+        }
+        
+        UserManager.shared.onUserChanged = { [weak self] in
+            DispatchQueue.main.async { [weak self] in
+                self?.userNameLabel.text = UserManager.shared.currentUser?.nickName
             }
         }
     }

@@ -36,6 +36,7 @@ public enum LabelValues {
             static let currentQuizz: String = "Recent Quiz"
             static let liveQuizzes: String = "Live Quizzes"
             static let seeAll: String = "See All"
+            static let seeLess: String = "See Less"
             static let noName: String = "Unknown Name"
             static let noCategory: String = "Unknown Category"
             static let noQuantity: String = "Unknown Quantity"
