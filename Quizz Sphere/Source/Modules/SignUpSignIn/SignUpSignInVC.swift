@@ -238,8 +238,8 @@ class SignUpSignInVC: UIViewController {
           collectionView.isPagingEnabled = false
           collectionView.showsHorizontalScrollIndicator = false
           collectionView.showsVerticalScrollIndicator = false
-          collectionView.delegate = self
-          collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
           return collectionView
     }()
     
@@ -265,8 +265,8 @@ class SignUpSignInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        addHideKeyboardTapGestureRecogniser()
         setupBindings()
+        getDelegates()
     }
     
     override func viewDidLayoutSubviews() {
@@ -276,7 +276,17 @@ class SignUpSignInVC: UIViewController {
     }
     
     //MARK: - Delegates
+    private func getDelegates() {
+        getTextFieldDelegates()
+    }
     
+    private func getTextFieldDelegates() {
+        signUpEmailTextField.delegate = self
+        signUpPasswordTextField.delegate = self
+        signUpNickNameTextField.delegate = self
+        signInPasswordTextField.delegate = self
+        signInEmailTextField.delegate = self
+    }
     //MARK: - Setup UI
     private func setupUI() {
         setUpMainView()
@@ -421,6 +431,7 @@ class SignUpSignInVC: UIViewController {
     
     private func setChooseAnAvatarCard() {
         view.addSubview(chooseAnAvatarCard)
+        
         
         
         NSLayoutConstraint.activate([

@@ -33,6 +33,10 @@ final class AvatarsCell: UICollectionViewCell {
     
     private func setup() {
         setAvatarImage()
+        cellSetup()
+    }
+    
+    private func cellSetup() {
     }
     
     private func setAvatarImage() {

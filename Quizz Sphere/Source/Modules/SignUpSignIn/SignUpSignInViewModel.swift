@@ -34,6 +34,10 @@ final class SignUpSignInViewModel {
     
     var isPasswordValid: Bool {
         ValidationManager.shared.isPasswordValid(signUpPassword)
+    }   
+    
+    var isAvatarImageUrlValid: Bool {
+        ValidationManager.shared.isStringEmpty(signupAvatarImageUrl)
     }
     
     var onAvatarsChanged: (() -> Void)?
@@ -54,12 +58,13 @@ final class SignUpSignInViewModel {
     }
     
     func createUser(completion: @escaping (Bool) -> Void) {
-        if isEmailValid && isNicknameValid && isPasswordValid {
+        if isEmailValid && isNicknameValid && isPasswordValid && isAvatarImageUrlValid {
             print("DEBUG: Validation passed")
             Task {
                 try await FirebaseManager.shared.createUser(withEmail: signupEmail, 
                                                             nickName: signUpNickname,
-                                                            password: signUpPassword) { success in
+                                                            password: signUpPassword,
+                                                            avatarImageUrl: signupAvatarImageUrl) { success in
                     switch success {
                     case true:
                         completion(true)
@@ -71,7 +76,7 @@ final class SignUpSignInViewModel {
                 }
             }
         } else {
-            print("DEBUG: Validation failed - Email: \(isEmailValid), Nickname: \(isNicknameValid), Password: \(isPasswordValid)")
+            print("DEBUG: Validation failed - Email: \(isEmailValid), Nickname: \(isNicknameValid), Password: \(isPasswordValid), AvatarUrl: \(signupAvatarImageUrl)")
         }
     }
     

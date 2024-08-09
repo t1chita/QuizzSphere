@@ -8,7 +8,12 @@
 import UIKit
 
 extension SignUpSignInVC: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = signUpSignInViewModel.avatars[indexPath.row]
+        signUpSignInViewModel.signupAvatarImageUrl = item.imageUrl
+        print(signUpSignInViewModel.signupAvatarImageUrl)
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
 }
 
 extension SignUpSignInVC: UICollectionViewDataSource {
