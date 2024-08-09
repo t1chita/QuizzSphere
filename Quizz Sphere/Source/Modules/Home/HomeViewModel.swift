@@ -18,7 +18,7 @@ class HomeViewModel {
     
     var quizSheetAnimate: Bool = false
     
-    var onQuizzesChanged: (() -> Void)?    
+    var onQuizzesChanged: (() -> Void)?
     
     init() {
         getQuizzes()
@@ -29,11 +29,12 @@ class HomeViewModel {
     }
     
     private func getQuizzes() {
-        FirebaseManager.shared.getQuizzes { [weak self] quizzes, error in
+        FirebaseManager.shared.getDocuments(from: "quizzes") { [weak self] (quizzes: [Quiz]?, error) in
             if error == nil {
                 self?.quizzes = quizzes ?? []
             } else {
-                print("DEBUG: Get Quizzes Error In Home ViewModel \(String(describing: error?.localizedDescription))")            }
+                print("DEBUG: Get Quizzes Error In Home ViewModel \(String(describing: error?.localizedDescription))")
+            }
         }
     }
 }

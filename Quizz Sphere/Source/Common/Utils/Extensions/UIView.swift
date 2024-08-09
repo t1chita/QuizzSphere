@@ -68,3 +68,24 @@ private extension UIView {
         layer.addSublayer(borderLayer)
     }
 }
+
+extension UIView {
+    func animShow(height: CGFloat) {
+        self.isHidden = false
+        UIView.animate(withDuration: 1, delay: 0, options: [.curveEaseIn], animations: {
+            self.heightAnchor.constraint(equalToConstant: height).isActive = true
+            self.superview?.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    func animHide() {
+        UIView.animate(withDuration: 1, delay: 0, options: [.curveLinear], animations: {
+            self.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            self.superview?.layoutIfNeeded()
+        }, completion: { completed in
+            self.isHidden = true
+        })
+    }
+}
+
+

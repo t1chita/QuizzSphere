@@ -9,7 +9,7 @@ import UIKit
 
 class SignUpSignInVC: UIViewController {
     //MARK: - Properties
-    private var signUpSignInViewModel: SignUpSignInViewModel
+    var signUpSignInViewModel: SignUpSignInViewModel
     
     var didSendEventClosure: ((SignUpSignInVC.Event) -> Void)?
     
@@ -203,6 +203,46 @@ class SignUpSignInVC: UIViewController {
         return signUpPasswordValidateLabel
     }()
     
+    private lazy var chooseAnAvatarButton: QSButton = {
+        let button = QSButton()
+        button.configure(with: LabelValues.Scenes.SignInSignUp.chooseAnAvatar,
+                         fontType: .regular,
+                         backgroundColor: .clear,
+                         cornerRadius: 0)
+        return button
+    }()
+    
+    private lazy var chooseAnAvatarCard: QSCard = {
+        let view = QSCard()
+        view.configure(backgroundColor: .blueCard)
+        view.isHidden = true
+        return view
+    }()
+    
+    private lazy var chooseAnAvatarLabel: QSLabel = {
+       let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.SignInSignUp.chooseAnAvatar,
+                        fontType: .bold,
+                        textAlignment: .center,
+                        textColor: .primaryText)
+        return label
+    }()
+    
+    private lazy var avatarsCollectionView: UICollectionView = {
+        let collectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionViewFlowLayout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+          collectionView.translatesAutoresizingMaskIntoConstraints = false
+          collectionView.register(AvatarsCell.self, forCellWithReuseIdentifier: AvatarsCell.identifier)
+          collectionView.backgroundColor = .clear
+          collectionView.isPagingEnabled = false
+          collectionView.showsHorizontalScrollIndicator = false
+          collectionView.showsVerticalScrollIndicator = false
+          collectionView.delegate = self
+          collectionView.dataSource = self
+          return collectionView
+    }()
+    
     private lazy var signUpButton: QSButton = {
         let button = QSButton()
         button.configure(with: LabelValues.Scenes.SignInSignUp.signUp,
@@ -226,6 +266,13 @@ class SignUpSignInVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         addHideKeyboardTapGestureRecogniser()
+        setupBindings()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        chooseAnAvatarCard.round(corners: [.topLeft, .topRight],
+                                 radius: Constants.cardSmallCornerRadius)
     }
     
     //MARK: - Delegates
@@ -233,13 +280,19 @@ class SignUpSignInVC: UIViewController {
     //MARK: - Setup UI
     private func setupUI() {
         setUpMainView()
+        
         setTitleLabel()
         setSegmentedControlContainerView()
         setSegmentedControl()
         setBottomUnderLineView()
+        
         setFormStackView()
         setPasswordFunctionalityStackView()
         setSignUpStackView()
+        
+        setChooseAnAvatarCard()
+        setChooseAnAvatarLabel()
+        setAvatarsCollectionView()
     }
     
     //MARK: - Set UI Components
@@ -329,6 +382,7 @@ class SignUpSignInVC: UIViewController {
         signUpFormStackView.addArrangedSubview(signUpNickNameValidateLabel)
         signUpFormStackView.addArrangedSubview(signUpPasswordTextField)
         signUpFormStackView.addArrangedSubview(signUpPasswordValidateLabel)
+        signUpFormStackView.addArrangedSubview(chooseAnAvatarButton)
         signUpFormStackView.addArrangedSubview(signUpButton)
         
         signUpEmailValidateLabel.isHidden = true
@@ -354,10 +408,47 @@ class SignUpSignInVC: UIViewController {
             self?.handleSignUpButtonTapped()
         }
         
+        chooseAnAvatarButton.didSendEventClosure = {[weak self] in
+            self?.handleChooseAnAvatarButtonTapped()
+        }
+        
         NSLayoutConstraint.activate([
             signUpFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signUpFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             signUpFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+        ])
+    }
+    
+    private func setChooseAnAvatarCard() {
+        view.addSubview(chooseAnAvatarCard)
+        
+        
+        NSLayoutConstraint.activate([
+            chooseAnAvatarCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            chooseAnAvatarCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            chooseAnAvatarCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+    
+    private func setChooseAnAvatarLabel() {
+        chooseAnAvatarCard.addSubview(chooseAnAvatarLabel)
+        
+        NSLayoutConstraint.activate([
+            chooseAnAvatarLabel.topAnchor.constraint(equalTo: chooseAnAvatarCard.topAnchor, constant: 16),
+            chooseAnAvatarLabel.leadingAnchor.constraint(equalTo: chooseAnAvatarCard.leadingAnchor),
+            chooseAnAvatarLabel.trailingAnchor.constraint(equalTo: chooseAnAvatarCard.trailingAnchor),
+            chooseAnAvatarLabel.heightAnchor.constraint(equalToConstant: 20),
+        ])
+    }
+    
+    private func setAvatarsCollectionView() {
+        chooseAnAvatarCard.addSubview(avatarsCollectionView)
+        
+        NSLayoutConstraint.activate([
+            avatarsCollectionView.topAnchor.constraint(equalTo: chooseAnAvatarLabel.bottomAnchor),
+            avatarsCollectionView.leadingAnchor.constraint(equalTo: chooseAnAvatarCard.leadingAnchor),
+            avatarsCollectionView.trailingAnchor.constraint(equalTo: chooseAnAvatarCard.trailingAnchor),
+            avatarsCollectionView.bottomAnchor.constraint(equalTo: chooseAnAvatarCard.bottomAnchor)
         ])
     }
     
@@ -423,6 +514,16 @@ class SignUpSignInVC: UIViewController {
     }
 }
 
+extension SignUpSignInVC {
+    func setupBindings() {
+        signUpSignInViewModel.onAvatarsChanged = {[weak self] in
+            DispatchQueue.main.async { [weak self] in
+                self?.avatarsCollectionView.reloadData()
+            }
+        }
+    }
+}
+
 //MARK: - Actions
 extension SignUpSignInVC {
     private func handleSignUpButtonTapped() {
@@ -457,6 +558,10 @@ extension SignUpSignInVC {
         }
     }
     
+    private func handleChooseAnAvatarButtonTapped() {
+        chooseAnAvatarCard.animShow(height: 200)
+    }
+    
     private func setViewModelSignUpProperties() {
         signUpSignInViewModel.signupEmail = signUpEmailTextField.text ?? ""
         signUpSignInViewModel.signUpNickname = signUpNickNameTextField.text ?? ""
@@ -487,5 +592,6 @@ extension SignUpSignInVC {
         static let verticalStackViewSpacing: CGFloat = 20
         static let horizontalStackViewSpacing: CGFloat = 4
         static let buttonCornerRadius: CGFloat = 4
+        static let cardSmallCornerRadius: CGFloat = 10
     }
 }

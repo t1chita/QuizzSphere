@@ -14,6 +14,15 @@ final class SignUpSignInViewModel {
     var signUpPassword: String = ""
     var signUpNickname: String = ""
     var signupEmail: String = ""
+    var signupAvatarImageUrl: String = ""
+    
+    var avatars: [Avatar] = [] {
+        didSet { onAvatarsChanged?() }
+    }
+    
+    var avatarsCount: Int {
+        avatars.count
+    }
     
     var isEmailValid: Bool {
         ValidationManager.shared.isEmailValid(signupEmail)
@@ -25,6 +34,12 @@ final class SignUpSignInViewModel {
     
     var isPasswordValid: Bool {
         ValidationManager.shared.isPasswordValid(signUpPassword)
+    }
+    
+    var onAvatarsChanged: (() -> Void)?
+    
+    init() {
+        getAvatars()
     }
     
     func isInputValid(forType type: ValidationType) -> String {
@@ -48,7 +63,7 @@ final class SignUpSignInViewModel {
                     switch success {
                     case true:
                         completion(true)
-                        print("DEBUG: User Saved On On Firebase")
+                        print("DEBUG: User Saved On Firebase")
                     case false:
                         completion(false)
                         print("DEBUG: Can't Save User On Firebase")
@@ -75,6 +90,15 @@ final class SignUpSignInViewModel {
                 
             }
         }
-        
+    }
+    
+    private func getAvatars() {
+        FirebaseManager.shared.getDocuments(from: "avatars") { [weak self] (avatars: [Avatar]?, error) in
+            if error == nil {
+                self?.avatars = avatars ?? []
+            } else {
+                print("DEBUG: Get Avatars Error In ViewModel \(String(describing: error?.localizedDescription))")
+            }
+        }
     }
 }
