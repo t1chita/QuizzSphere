@@ -38,12 +38,18 @@ final class SignUpSignInViewModel {
     
     var isAvatarImageUrlValid: Bool {
         ValidationManager.shared.isStringEmpty(signupAvatarImageUrl)
-    }
+    }  
+    
+    var isAvatarCardExpanded: Bool = false
     
     var onAvatarsChanged: (() -> Void)?
     
     init() {
         getAvatars()
+    }
+    
+    func toggleIsAvatarCardExpanded() {
+        isAvatarCardExpanded.toggle()
     }
     
     func isInputValid(forType type: ValidationType) -> String {

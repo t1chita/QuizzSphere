@@ -13,6 +13,8 @@ class SignUpSignInVC: UIViewController {
     
     var didSendEventClosure: ((SignUpSignInVC.Event) -> Void)?
     
+//    private var chooseAnAvatarCardConstraint: NSLayoutConstraint?
+    
     //MARK: - UIComponents
     private lazy var titleLabel: QSLabel = {
         let label = QSLabel()
@@ -33,6 +35,7 @@ class SignUpSignInVC: UIViewController {
         segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.logIn,
                                        at: 0,
                                        animated: false)
+        
         segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.signUp,
                                        at: 1,
                                        animated: false)
@@ -69,6 +72,10 @@ class SignUpSignInVC: UIViewController {
     
     private lazy var leadingDistanceConstraint: NSLayoutConstraint = {
         return bottomUnderlineView.leftAnchor.constraint(equalTo: segmentedControl.leftAnchor)
+    }()   
+    
+    private lazy var chooseAnAvatarCardBottomConstraint: NSLayoutConstraint = { [weak self] in
+        return self!.chooseAnAvatarCard.bottomAnchor.constraint(equalTo: self!.view.bottomAnchor, constant: 200)
     }()
     
     private lazy var signInFormStackView: QSVerticalStackView = {
@@ -212,10 +219,9 @@ class SignUpSignInVC: UIViewController {
         return button
     }()
     
-    private lazy var chooseAnAvatarCard: QSCard = {
+    internal lazy var chooseAnAvatarCard: QSCard = {
         let view = QSCard()
         view.configure(backgroundColor: .blueCard)
-        view.isHidden = true
         return view
     }()
     
@@ -419,7 +425,7 @@ class SignUpSignInVC: UIViewController {
         }
         
         chooseAnAvatarButton.didSendEventClosure = {[weak self] in
-            self?.handleChooseAnAvatarButtonTapped()
+            self?.handleAvatarsCardAnimation()
         }
         
         NSLayoutConstraint.activate([
@@ -432,12 +438,11 @@ class SignUpSignInVC: UIViewController {
     private func setChooseAnAvatarCard() {
         view.addSubview(chooseAnAvatarCard)
         
-        
-        
         NSLayoutConstraint.activate([
             chooseAnAvatarCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             chooseAnAvatarCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            chooseAnAvatarCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            chooseAnAvatarCard.heightAnchor.constraint(equalToConstant: 200),
+            chooseAnAvatarCardBottomConstraint,
         ])
     }
     
@@ -523,6 +528,22 @@ class SignUpSignInVC: UIViewController {
             self?.view.layoutIfNeeded()
         })
     }
+    
+    
+    
+    internal func handleAvatarsCardAnimation() {
+        signUpSignInViewModel.toggleIsAvatarCardExpanded()
+
+        let newBottomAnchorConstant: CGFloat = signUpSignInViewModel.isAvatarCardExpanded ? 0 : 400
+
+        // Ensure consistent animation duration
+        let animationDuration: TimeInterval = 0.3
+
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+            self?.chooseAnAvatarCardBottomConstraint.constant = newBottomAnchorConstant
+            self?.view.layoutIfNeeded()
+        })
+    }
 }
 
 extension SignUpSignInVC {
@@ -567,10 +588,6 @@ extension SignUpSignInVC {
                 }
             }
         }
-    }
-    
-    private func handleChooseAnAvatarButtonTapped() {
-        chooseAnAvatarCard.animShow(height: 200)
     }
     
     private func setViewModelSignUpProperties() {

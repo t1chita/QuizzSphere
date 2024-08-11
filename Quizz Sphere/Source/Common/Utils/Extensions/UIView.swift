@@ -69,23 +69,45 @@ private extension UIView {
     }
 }
 
-extension UIView {
-    func animShow(height: CGFloat) {
-        self.isHidden = false
-        UIView.animate(withDuration: 1, delay: 0, options: [.curveEaseIn], animations: {
-            self.heightAnchor.constraint(equalToConstant: height).isActive = true
-            self.superview?.layoutIfNeeded()
-        }, completion: nil)
-    }
-    
-    func animHide() {
-        UIView.animate(withDuration: 1, delay: 0, options: [.curveLinear], animations: {
-            self.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            self.superview?.layoutIfNeeded()
-        }, completion: { completed in
-            self.isHidden = true
-        })
-    }
-}
-
-
+//extension UIView {
+//    func animShow(height: CGFloat) {
+//        self.isHidden = false
+//        
+//        if let existingHeightConstraint = self.constraints.first(where: { $0.firstAttribute == .height }) {
+//            existingHeightConstraint.isActive = false
+//        }
+//        
+//        // Activate the new height constraint
+//        let newHeightConstraint = self.heightAnchor.constraint(equalToConstant: height)
+//        newHeightConstraint.isActive = true
+//        
+//        
+//        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: {
+//            self.superview?.layoutIfNeeded()
+//        }, completion: nil)
+//    }
+//    
+//    
+//    func animHide() {
+//        // Find and deactivate the existing height constraint, if any
+//        if let existingHeightConstraint = self.constraints.first(where: { $0.firstAttribute == .height }) {
+//            existingHeightConstraint.isActive = false
+//        }
+//        
+//        // Activate the new height constraint
+//        let newHeightConstraint = self.heightAnchor.constraint(equalToConstant: 0)
+//        newHeightConstraint.isActive = true
+//        
+//        // Animate the change
+//        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: {
+//            self.superview?.layoutIfNeeded()
+//        }, completion: { completed in
+//            // Only hide the view after the animation has finished
+//            if completed {
+//                self.isHidden = true
+//            }
+//        })
+//    }
+//}
+//
+//
