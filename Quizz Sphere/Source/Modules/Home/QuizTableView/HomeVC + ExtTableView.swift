@@ -8,7 +8,10 @@
 import UIKit
 
 extension HomeVC: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let quiz = homeViewModel.quizzes[indexPath.row]
+        didSendEventClosure?(.quizTapped, quiz)
+    }
 }
 
 extension HomeVC: UITableViewDataSource {

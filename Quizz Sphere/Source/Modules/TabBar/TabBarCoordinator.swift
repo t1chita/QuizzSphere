@@ -17,7 +17,7 @@ protocol  TabBarCoordinatorProtocol: Coordinator {
     func currentPage() -> TabBarPage?
 }
 
-class TabBarCoordinator:NSObject, Coordinator {
+class TabBarCoordinator: NSObject, Coordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     
     var navigationController: UINavigationController
@@ -73,6 +73,17 @@ class TabBarCoordinator:NSObject, Coordinator {
             // If needed: Each tab bar flow can have it's own Coordinator.
             let homeViewModel = HomeViewModel()
             let homeVC = HomeVC(homeViewModel: homeViewModel)
+            
+            homeVC.didSendEventClosure = { event, quiz in
+                switch event {
+                case .quizTapped:
+                    let questionsViewModel = QuestionsViewModel(quiz: quiz)
+                    let questionsVC = QuestionsVC(viewModel: questionsViewModel)
+
+                    print(quiz.name)
+                    navController.pushViewController(questionsVC, animated: true )
+                }
+            }
             
             navController.pushViewController(homeVC, animated: true)
         case .leaderBoard:

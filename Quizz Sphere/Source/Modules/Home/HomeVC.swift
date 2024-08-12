@@ -7,9 +7,11 @@
 
 import UIKit
 
-class HomeVC: UIViewController {
+final class HomeVC: UIViewController {
     //MARK: - Properties
     var homeViewModel: HomeViewModel
+    
+    var didSendEventClosure: ((HomeVC.Event, Quiz) -> Void)?
     
     private var quizSheetTopConstraint: NSLayoutConstraint?
     
@@ -372,6 +374,10 @@ extension HomeVC {
 }
 
 extension HomeVC {
+    enum Event {
+        case quizTapped
+    }
+    
     enum Constants {
         static let cardSmallCornerRadius: CGFloat = 10
         static let cardMediumCornerRadius: CGFloat = 30

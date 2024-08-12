@@ -43,7 +43,6 @@ class SignUpSignInCoordinator: SignUpSignInCoordinatorProtocol {
                 self?.finish()
             }
         }
-        
         navigationController.pushViewController(signUpSignInVC, animated: true)
     }
 }

@@ -27,6 +27,8 @@
 		26594A422C55A08A008C6D04 /* LabelValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A412C55A08A008C6D04 /* LabelValues.swift */; };
 		26594A442C55B3A1008C6D04 /* QSCheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */; };
 		26594A462C55CADB008C6D04 /* QSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26594A452C55CADB008C6D04 /* QSButton.swift */; };
+		266DB3682C6A3FA7008CAE65 /* QuestionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266DB3672C6A3FA7008CAE65 /* QuestionsVC.swift */; };
+		266DB36A2C6A3FB4008CAE65 /* QuestionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266DB3692C6A3FB4008CAE65 /* QuestionsViewModel.swift */; };
 		268023CA2C5934FC0099ECA3 /* ValidationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023C92C5934FC0099ECA3 /* ValidationManager.swift */; };
 		268023D12C5B60610099ECA3 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023D02C5B60610099ECA3 /* UIViewController.swift */; };
 		268023D32C5B78890099ECA3 /* QSHorizontalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268023D22C5B78890099ECA3 /* QSHorizontalStackView.swift */; };
@@ -94,6 +96,8 @@
 		26594A412C55A08A008C6D04 /* LabelValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelValues.swift; sourceTree = "<group>"; };
 		26594A432C55B3A1008C6D04 /* QSCheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSCheckBoxButton.swift; sourceTree = "<group>"; };
 		26594A452C55CADB008C6D04 /* QSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSButton.swift; sourceTree = "<group>"; };
+		266DB3672C6A3FA7008CAE65 /* QuestionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsVC.swift; sourceTree = "<group>"; };
+		266DB3692C6A3FB4008CAE65 /* QuestionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsViewModel.swift; sourceTree = "<group>"; };
 		268023C92C5934FC0099ECA3 /* ValidationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationManager.swift; sourceTree = "<group>"; };
 		268023D02C5B60610099ECA3 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		268023D22C5B78890099ECA3 /* QSHorizontalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSHorizontalStackView.swift; sourceTree = "<group>"; };
@@ -195,6 +199,15 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
+		266DB3662C6A3F8F008CAE65 /* Questions */ = {
+			isa = PBXGroup;
+			children = (
+				266DB3672C6A3FA7008CAE65 /* QuestionsVC.swift */,
+				266DB3692C6A3FB4008CAE65 /* QuestionsViewModel.swift */,
+			);
+			path = Questions;
+			sourceTree = "<group>";
+		};
 		268023DA2C60B1950099ECA3 /* QuizTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +287,7 @@
 				268DCB872C51ABD8000995A4 /* SignUpSignIn */,
 				268DCB8E2C51C095000995A4 /* TabBar */,
 				268DCB932C51C1AA000995A4 /* Home */,
+				266DB3662C6A3F8F008CAE65 /* Questions */,
 				268DCB9C2C51D43D000995A4 /* LeaderBoard */,
 				268DCB9D2C51D447000995A4 /* Profile */,
 			);
@@ -622,6 +636,8 @@
 				262065192C56938300484B3F /* QSVerticalStackView.swift in Sources */,
 				26594A2B2C52F5AE008C6D04 /* QSLabel.swift in Sources */,
 				268DCB972C51C1CB000995A4 /* HomeViewModel.swift in Sources */,
+				266DB3682C6A3FA7008CAE65 /* QuestionsVC.swift in Sources */,
+				266DB36A2C6A3FB4008CAE65 /* QuestionsViewModel.swift in Sources */,
 				268DCBA32C51D470000995A4 /* ProfileVC.swift in Sources */,
 				268DCB8B2C51AC2D000995A4 /* SignUpSignInViewModel.swift in Sources */,
 				268DCB9F2C51D45E000995A4 /* LeaderBoardVC.swift in Sources */,
