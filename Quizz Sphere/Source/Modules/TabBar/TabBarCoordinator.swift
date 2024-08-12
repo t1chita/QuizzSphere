@@ -79,6 +79,10 @@ class TabBarCoordinator: NSObject, Coordinator {
                 case .quizTapped:
                     let questionsViewModel = QuestionsViewModel(quiz: quiz)
                     let questionsVC = QuestionsVC(viewModel: questionsViewModel)
+                    
+                    questionsVC.didSendEventClosure = { event in
+                        navController.popViewController(animated: true)
+                    }
 
                     print(quiz.name)
                     navController.pushViewController(questionsVC, animated: true )

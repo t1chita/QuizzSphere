@@ -10,6 +10,7 @@ import UIKit
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let quiz = homeViewModel.quizzes[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
         didSendEventClosure?(.quizTapped, quiz)
     }
 }

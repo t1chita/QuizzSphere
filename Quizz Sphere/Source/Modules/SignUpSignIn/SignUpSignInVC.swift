@@ -13,8 +13,6 @@ class SignUpSignInVC: UIViewController {
     
     var didSendEventClosure: ((SignUpSignInVC.Event) -> Void)?
     
-//    private var chooseAnAvatarCardConstraint: NSLayoutConstraint?
-    
     //MARK: - UIComponents
     private lazy var titleLabel: QSLabel = {
         let label = QSLabel()
@@ -72,7 +70,7 @@ class SignUpSignInVC: UIViewController {
     
     private lazy var leadingDistanceConstraint: NSLayoutConstraint = {
         return bottomUnderlineView.leftAnchor.constraint(equalTo: segmentedControl.leftAnchor)
-    }()   
+    }()
     
     private lazy var chooseAnAvatarCardBottomConstraint: NSLayoutConstraint = { [weak self] in
         return self!.chooseAnAvatarCard.bottomAnchor.constraint(equalTo: self!.view.bottomAnchor, constant: 200)
@@ -226,7 +224,7 @@ class SignUpSignInVC: UIViewController {
     }()
     
     private lazy var chooseAnAvatarLabel: QSLabel = {
-       let label = QSLabel()
+        let label = QSLabel()
         label.configure(with: LabelValues.Scenes.SignInSignUp.chooseAnAvatar,
                         fontType: .bold,
                         textAlignment: .center,
@@ -238,15 +236,15 @@ class SignUpSignInVC: UIViewController {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
         collectionViewFlowLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
-          collectionView.translatesAutoresizingMaskIntoConstraints = false
-          collectionView.register(AvatarsCell.self, forCellWithReuseIdentifier: AvatarsCell.identifier)
-          collectionView.backgroundColor = .clear
-          collectionView.isPagingEnabled = false
-          collectionView.showsHorizontalScrollIndicator = false
-          collectionView.showsVerticalScrollIndicator = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(AvatarsCell.self, forCellWithReuseIdentifier: AvatarsCell.identifier)
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
-          return collectionView
+        return collectionView
     }()
     
     private lazy var signUpButton: QSButton = {
@@ -404,7 +402,7 @@ class SignUpSignInVC: UIViewController {
         signUpEmailValidateLabel.isHidden = true
         signUpNickNameValidateLabel.isHidden = true
         signUpPasswordValidateLabel.isHidden = true
-
+        
         signUpEmailTextField.addAction(UIAction(handler: { [weak self] _ in
             self?.signUpSignInViewModel.signupEmail = self?.signUpEmailTextField.text ?? ""
             self?.validateEmail()
@@ -533,12 +531,12 @@ class SignUpSignInVC: UIViewController {
     
     internal func handleAvatarsCardAnimation() {
         signUpSignInViewModel.toggleIsAvatarCardExpanded()
-
+        
         let newBottomAnchorConstant: CGFloat = signUpSignInViewModel.isAvatarCardExpanded ? 0 : 400
-
+        
         // Ensure consistent animation duration
         let animationDuration: TimeInterval = 0.3
-
+        
         UIView.animate(withDuration: animationDuration,
                        animations: { [weak self] in
             
@@ -598,7 +596,7 @@ extension SignUpSignInVC {
         signUpSignInViewModel.signUpPassword = signUpPasswordTextField.text ?? ""
         
         print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signupEmail), Nickname: \(signUpSignInViewModel.signUpNickname), Password: \(signUpSignInViewModel.signUpPassword)")
-    }  
+    }
     
     private func setViewModelSignInProperties() {
         signUpSignInViewModel.signInEmail = signInEmailTextField.text ?? ""

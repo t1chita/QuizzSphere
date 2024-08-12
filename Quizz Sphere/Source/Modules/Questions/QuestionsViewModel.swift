@@ -11,11 +11,17 @@ final class QuestionsViewModel {
     //MARK: - Properties
     let quiz: Quiz
     
+    var userIsReadyToPlay: Bool = false
+    
     //MARK: - Initialisation
     init(quiz: Quiz) {
         self.quiz = quiz
     }
+    
     //MARK: - Child Method
+    func toggleUserIsReadyToPlay() {
+        userIsReadyToPlay.toggle()
+    }
     
     //MARK: - Requests
     

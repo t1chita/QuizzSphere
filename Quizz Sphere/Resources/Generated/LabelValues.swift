@@ -41,6 +41,12 @@ public enum LabelValues {
             static let noName: String = "Unknown Name"
             static let noCategory: String = "Unknown Category"
             static let noQuantity: String = "Unknown Quantity"
+        }     
+        
+        public enum Questions {
+            static let areYouReady: String = "Are You Ready?"
+            static let ready: String = "Ready"
+            static let goBack: String = "Go Back"
         }
     }
 }
