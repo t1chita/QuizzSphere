@@ -18,10 +18,8 @@ extension HomeVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: QuizCell.identifier, for: indexPath) as! QuizCell
-        cell.configure(withQuizImageUrl: "",
-                       quizTitle: homeViewModel.quizzes[indexPath.row].name,
-                       quizCategory: homeViewModel.quizzes[indexPath.row].category,
-                       quizQuantity: homeViewModel.quizzes[indexPath.row].quantity)
+        let quiz = homeViewModel.quizzes[indexPath.row]
+        cell.configure(withQuiz: quiz)
         return cell
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 final class QuizCell: UITableViewCell {
     //MARK: - Properties
     static let identifier: String = "QuizCell"
+    var quizId: String = ""
     
     //MARK: - UIComponents
     private lazy var containerView: UIView = {
@@ -31,7 +32,6 @@ final class QuizCell: UITableViewCell {
     
     private lazy var quizImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = .math
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = Constants.imageViewCornerRadius
@@ -95,14 +95,13 @@ final class QuizCell: UITableViewCell {
     }
     
     //MARK: - Configure
-    func configure(withQuizImageUrl imageUrl: String,
-                   quizTitle: String,
-                   quizCategory: String,
-                   quizQuantity: Int) {
-        
-        quizTitleLabel.text = quizTitle
-        quizCategoryLabel.text = quizCategory
-        quizQuantityLabel.text = String(quizQuantity) + " Quizzes"
+    func configure(withQuiz quiz: Quiz) {
+        guard let quizImageUrl = URL(string: quiz.imageUrl) else { return }
+        quizTitleLabel.text = quiz.name
+        quizCategoryLabel.text = quiz.category
+        quizQuantityLabel.text = String(quiz.quantity) + " Quizzes"
+        quizId = quiz.id
+        quizImageView.loadImage(from: quizImageUrl)
     }
     
     //MARK: - Setup UI

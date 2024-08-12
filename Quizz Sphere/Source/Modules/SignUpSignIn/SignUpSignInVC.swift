@@ -539,7 +539,9 @@ class SignUpSignInVC: UIViewController {
         // Ensure consistent animation duration
         let animationDuration: TimeInterval = 0.3
 
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+        UIView.animate(withDuration: animationDuration,
+                       animations: { [weak self] in
+            
             self?.chooseAnAvatarCardBottomConstraint.constant = newBottomAnchorConstant
             self?.view.layoutIfNeeded()
         })

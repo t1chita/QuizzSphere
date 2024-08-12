@@ -36,7 +36,6 @@ class HomeVC: UIViewController {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "person.circle.fill")
         imageView.layer.cornerRadius = imageView.frame.size.width / 2
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -361,8 +360,12 @@ extension HomeVC {
         }
         
         UserManager.shared.onUserChanged = { [weak self] in
+            
+            guard let imageUrl = URL(string: UserManager.shared.currentUser!.avatarImageUrl) else { return }
+            
             DispatchQueue.main.async { [weak self] in
                 self?.userNameLabel.text = UserManager.shared.currentUser?.nickName
+                self?.userProfileImage.loadImage(from: imageUrl)
             }
         }
     }

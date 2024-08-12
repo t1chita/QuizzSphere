@@ -58,7 +58,7 @@ final class FirebaseManager {
                             let doc = try document.data(as: T.self)
                             documents.append(doc)
                         } catch {
-                            print("DEBUG: Error decoding document from \(collection): \(error.localizedDescription)")
+                            print("DEBUG: Error decoding document from \(collection): \(error)")
                         }
                     }
                 }
