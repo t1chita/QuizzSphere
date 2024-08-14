@@ -19,8 +19,10 @@ struct Quiz: Codable {
 struct Question: Codable {
     let id: Int?
     let description: String
-    let correctAnswer: String
-    let incorrectAnswerOne: String
-    let incorrectAnswerTwo: String
-    let incorrectAnswerThree: String
+    let answers: [Answer]
+}
+
+struct Answer: Codable {
+    let description: String
+    let isCorrect: Bool
 }

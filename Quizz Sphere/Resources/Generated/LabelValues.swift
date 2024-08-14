@@ -47,6 +47,14 @@ public enum LabelValues {
             static let areYouReady: String = "Are You Ready?"
             static let ready: String = "Ready"
             static let goBack: String = "Go Back"
+            static let noAnswer: String = "Unknown Answer"
+            static let successfulPopupTitle: String = "Congratulations 🥳"
+            static let successfulPopupMessage: String = "You Earned"
+            static let unSuccessfulPopupMessage: String = "You missed it this time. Better luck next time!"
+            static let unSuccessfulPopupTitle: String = "Keep Going!✊"
+            static let points: String = "Points"
+            static let next: String = "Next"
+            static let complete: String = "Complete"
         }
     }
 }

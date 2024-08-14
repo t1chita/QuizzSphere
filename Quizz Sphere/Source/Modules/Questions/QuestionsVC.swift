@@ -13,6 +13,11 @@ final class QuestionsVC: UIViewController {
     
     var didSendEventClosure: ((QuestionsVC.Event) -> Void)?
     
+    private lazy var timer: Timer = {
+        let timer = Timer()
+        return timer
+    }()
+    
     //MARK: - UIComponents
     private lazy var areYouReadyStackView: QSVerticalStackView = {
         let stackView = QSVerticalStackView()
@@ -54,68 +59,89 @@ final class QuestionsVC: UIViewController {
         return label
     }()
     
-    private lazy var answersVerticalStackView: QSVerticalStackView = {
-        let stackView = QSVerticalStackView()
-        stackView.spacing = 10
-        return stackView
+    private lazy var answersCollectionView: UICollectionView = {
+        let collectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionViewFlowLayout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(AnswersCell.self, forCellWithReuseIdentifier: AnswersCell.identifier)
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.isScrollEnabled = false
+        return collectionView
     }()
     
-    private lazy var topHorizontalStackView: QSHorizontalStackView = {
+    private lazy var timerBackgroundView: QSCard = {
+        let view = QSCard()
+        view.configure(backgroundColor: .pinkCard)
+        return view
+    }()
+    
+    private lazy var timerHorizontalStackView: QSHorizontalStackView = {
         let stackView = QSHorizontalStackView()
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
         return stackView
     }()
     
-    private lazy var bottomHorizontalStackView: QSHorizontalStackView = {
+    private lazy var timerImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "clock")
+        imageView.tintColor = .blueCard
+        return imageView
+    }()
+    
+    private lazy var timerLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: "01:00",
+                        fontType: .bold,
+                        textAlignment: .right)
+        return label
+    }()
+    
+    private lazy var scoresBackgroundView: QSCard = {
+        let view = QSCard()
+        view.configure(backgroundColor: .pinkCard)
+        return view
+    }()
+    
+    private lazy var scoresHorizontalStackView: QSHorizontalStackView = {
         let stackView = QSHorizontalStackView()
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
         return stackView
     }()
     
-    private lazy var answerFirstButton: QSButton = {
-        let button = QSButton()
-        button.configure(with: viewModel.quiz.questions?.first?.correctAnswer,
-                         fontType: .regular,
-                         backgroundColor: .blueCard,
-                         cornerRadius: Constants.buttonSmallCornerRadius)
-        return button
+    private lazy var scoresImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = .coins
+        return imageView
     }()
-        
-    private lazy var answerSecondButton: QSButton = {
-        let button = QSButton()
-        button.configure(with: viewModel.quiz.questions?.first?.incorrectAnswerOne,
-                         fontType: .regular,
-                         backgroundColor: .blueCard,
-                         cornerRadius: Constants.buttonSmallCornerRadius)
-        return button
-    }()
-        
-    private lazy var answerThirdButton: QSButton = {
-        let button = QSButton()
-        button.configure(with: viewModel.quiz.questions?.first?.incorrectAnswerTwo,
-                         fontType: .regular,
-                         backgroundColor: .blueCard,
-                         cornerRadius: Constants.buttonSmallCornerRadius)
-        return button
-    }()
-        
-    private lazy var answerFourthButton: QSButton = {
-        let button = QSButton()
-        button.configure(with: viewModel.quiz.questions?.first?.incorrectAnswerThree,
-                         fontType: .regular,
-                         backgroundColor: .blueCard,
-                         cornerRadius: Constants.buttonSmallCornerRadius)
-        return button
+    
+    private lazy var scoresLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: "0 Points",
+                        fontType: .bold,
+                        textAlignment: .left)
+        return label
     }()
     
     private lazy var areYouReadyStackViewCenterXConstraint: NSLayoutConstraint = { [weak self] in
-        return self!.areYouReadyStackView.centerXAnchor.constraint(equalTo: self!.view.centerXAnchor, constant: -1000)
+        self!.areYouReadyStackView.centerXAnchor.constraint(equalTo: self!.view.centerXAnchor, constant: -1000)
     }()
     
     private lazy var questionLabelCenterXConstraint: NSLayoutConstraint = { [weak self] in
-        return self!.questionLabel.centerXAnchor.constraint(equalTo: self!.view.centerXAnchor, constant: 1000)
+        self!.questionLabel.centerXAnchor.constraint(equalTo: self!.view.centerXAnchor, constant: 1000)
+    }()
+    
+    private lazy var timerBackgroundViewTrailingConstraint: NSLayoutConstraint = { [weak self] in
+        self!.timerBackgroundView.trailingAnchor.constraint(equalTo: self!.view.trailingAnchor, constant: 1000)
+    }()
+    
+    private lazy var scoresBackgroundViewLeadingConstraint: NSLayoutConstraint = { [weak self] in
+        self!.scoresBackgroundView.leadingAnchor.constraint(equalTo: self!.view.leadingAnchor, constant: -1000)
     }()
     
     //MARK: - Initialisation
@@ -139,6 +165,14 @@ final class QuestionsVC: UIViewController {
         setupUI()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        timerBackgroundView.round(corners: [.topLeft, .bottomLeft],
+                                  radius: Constants.cardSmallCornerRadius)
+        scoresBackgroundView.round(corners: [.bottomRight, .topRight],
+                                   radius: Constants.cardSmallCornerRadius)
+    }
+    
     //MARK: - Delegates
     
     //MARK: - Setup UI
@@ -146,7 +180,11 @@ final class QuestionsVC: UIViewController {
         setMainView()
         setAreYouReadyStackView()
         setQuestionLabel()
-        setAnswersVerticalStackView()
+        setAnswersCollectionView()
+        setTimerBackgroundView()
+        setTimerHorizontalStackView()
+        setScoresBackgroundView()
+        setScoresHorizontalStackView()
     }
     
     //MARK: - Set UI Components
@@ -187,32 +225,77 @@ final class QuestionsVC: UIViewController {
         ])
     }
     
-    private func setAnswersVerticalStackView() {
-        view.addSubview(answersVerticalStackView)
-        
-        setTopHorizontalStackView()
+    private func setAnswersCollectionView() {
+        view.addSubview(answersCollectionView)
         
         NSLayoutConstraint.activate([
-            answersVerticalStackView.centerXAnchor.constraint(equalTo: questionLabel.centerXAnchor),
-            answersVerticalStackView.widthAnchor.constraint(equalTo: questionLabel.widthAnchor),
-            answersVerticalStackView.heightAnchor.constraint(equalToConstant: 200),
-            answersVerticalStackView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 60),
+            answersCollectionView.centerXAnchor.constraint(equalTo: questionLabel.centerXAnchor),
+            answersCollectionView.widthAnchor.constraint(equalTo: questionLabel.widthAnchor),
+            answersCollectionView.heightAnchor.constraint(equalToConstant: 200),
+            answersCollectionView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 60),
         ])
     }
     
-    private func setTopHorizontalStackView() {
-        answersVerticalStackView.addArrangedSubview(topHorizontalStackView)
-        topHorizontalStackView.addArrangedSubview(answerFirstButton)
-        topHorizontalStackView.addArrangedSubview(answerSecondButton)
+    private func setTimerBackgroundView() {
+        view.addSubview(timerBackgroundView)
         
-        answersVerticalStackView.addArrangedSubview(bottomHorizontalStackView)
-        bottomHorizontalStackView.addArrangedSubview(answerThirdButton)
-        bottomHorizontalStackView.addArrangedSubview(answerFourthButton)
+        NSLayoutConstraint.activate([
+            timerBackgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            timerBackgroundViewTrailingConstraint,
+            timerBackgroundView.heightAnchor.constraint(equalToConstant: 36),
+            timerBackgroundView.widthAnchor.constraint(equalToConstant: 110),
+        ])
     }
+    
+    private func setTimerHorizontalStackView() {
+        timerBackgroundView.addSubview(timerHorizontalStackView)
+        
+        timerHorizontalStackView.addArrangedSubview(timerImageView)
+        timerHorizontalStackView.addArrangedSubview(timerLabel)
+        
+        NSLayoutConstraint.activate([
+            timerImageView.widthAnchor.constraint(equalTo: timerHorizontalStackView.heightAnchor),
+            timerHorizontalStackView.topAnchor.constraint(equalTo: timerBackgroundView.topAnchor, constant: 6),
+            timerHorizontalStackView.leadingAnchor.constraint(equalTo: timerBackgroundView.leadingAnchor, constant: 10),
+            timerHorizontalStackView.trailingAnchor.constraint(equalTo: timerBackgroundView.trailingAnchor, constant: -10),
+            timerHorizontalStackView.bottomAnchor.constraint(equalTo: timerBackgroundView.bottomAnchor, constant: -6),
+        ])
+    }
+    
+    private func setScoresBackgroundView() {
+        view.addSubview(scoresBackgroundView)
+        
+        NSLayoutConstraint.activate([
+            scoresBackgroundViewLeadingConstraint,
+            scoresBackgroundView.topAnchor.constraint(equalTo: timerBackgroundView.bottomAnchor),
+            scoresBackgroundView.heightAnchor.constraint(equalTo: timerBackgroundView.heightAnchor),
+            scoresBackgroundView.widthAnchor.constraint(equalToConstant: 160),
+        ])
+    }
+    
+    private func setScoresHorizontalStackView() {
+        scoresBackgroundView.addSubview(scoresHorizontalStackView)
+        
+        scoresHorizontalStackView.addArrangedSubview(scoresLabel)
+        scoresHorizontalStackView.addArrangedSubview(scoresImageView)
+        
+        NSLayoutConstraint.activate([
+            scoresImageView.widthAnchor.constraint(equalTo: scoresHorizontalStackView.heightAnchor),
+            scoresHorizontalStackView.topAnchor.constraint(equalTo: scoresBackgroundView.topAnchor, constant: 6),
+            scoresHorizontalStackView.leadingAnchor.constraint(equalTo: scoresBackgroundView.leadingAnchor, constant: 10),
+            scoresHorizontalStackView.trailingAnchor.constraint(equalTo: scoresBackgroundView.trailingAnchor, constant: -10),
+            scoresHorizontalStackView.bottomAnchor.constraint(equalTo: scoresBackgroundView.bottomAnchor, constant: -6),
+        ])
+    }
+    
+    
     
     //MARK: - Animations
     private func animateAreYouReadyStackView() {
         let newCenterXAnchorConstant: CGFloat = viewModel.userIsReadyToPlay ? -1000 : 0
+        let labelNewCenterXAnchorConstant: CGFloat = viewModel.userIsReadyToPlay ?  0 : 1000
+        let timerBackgroundViewNewTrailingAnchorConstant: CGFloat = viewModel.userIsReadyToPlay ? 0 : 1000
+        let scoresBackgroundViewNewLeadingAnchorConstant: CGFloat = viewModel.userIsReadyToPlay ? 0 : -1000
         // Ensure consistent animation duration
         let animationDuration: TimeInterval = 0.3
         
@@ -223,23 +306,47 @@ final class QuestionsVC: UIViewController {
                        animations:{ [weak self] in
             
             self?.areYouReadyStackViewCenterXConstraint.constant = newCenterXAnchorConstant
+            self?.questionLabelCenterXConstraint.constant = labelNewCenterXAnchorConstant
+            self?.timerBackgroundViewTrailingConstraint.constant = timerBackgroundViewNewTrailingAnchorConstant
+            self?.scoresBackgroundViewLeadingConstraint.constant = scoresBackgroundViewNewLeadingAnchorConstant
             self?.view.layoutIfNeeded()
         }, completion: nil)
     }
     
-    private func animateQuestionLabelCenterXConstraint() {
-        let newCenterXAnchorConstant: CGFloat = viewModel.userIsReadyToPlay ?  0 : 1000
+    internal func animateQuestionAndAnswers(completion: @escaping () -> Void) {
+        let animationDuration: TimeInterval = 1
         
-        let animationDuration: TimeInterval = 0.3
         
         UIView.animate(withDuration: animationDuration,
                        delay: 0,
-                       options: .curveEaseIn,
-                       animations:{ [weak self] in
-            
-            self?.questionLabelCenterXConstraint.constant = newCenterXAnchorConstant
-            self?.view.layoutIfNeeded()
-        }, completion: nil)
+                       options: .curveEaseInOut) { [weak self] in
+            self?.questionLabel.alpha = 0
+            self?.answersCollectionView.alpha = 0
+        } completion: { [weak self] _ in
+            completion()
+            UIView.animate(withDuration: animationDuration) {
+                self?.questionLabel.alpha = 1
+                self?.answersCollectionView.alpha = 1
+            }
+        }
+    }
+    
+    //MARK: - Set Properties
+    private func setTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0,
+                                     target: self,
+                                     selector: #selector(updateTimer),
+                                     userInfo: nil,
+                                     repeats: true)
+    }
+    
+    @objc private func updateTimer() {
+        timerLabel.text = FormatterManager.shared.timeFormatted(viewModel.totalTime)
+        if viewModel.totalTime != 0 {
+            viewModel.totalTime -= 1
+        } else {
+            timer.invalidate()
+        }
     }
 }
 
@@ -249,16 +356,88 @@ extension QuestionsVC {
     private func handleReadyButton() {
         viewModel.toggleUserIsReadyToPlay()
         animateAreYouReadyStackView()
-        animateQuestionLabelCenterXConstraint()
+        setTimer()
+    }
+    
+    internal func handleCorrectAnswerTap(withCoins coins: Int,
+                                         question: String?,
+                                         buttonTitle: String,
+                                         questionIsLast: Bool) {
+        let overLayer = QSDialogVC()
+        overLayer.appear(onSender: self,
+                         withTitle: LabelValues.Scenes.Questions.successfulPopupTitle,
+                         message: LabelValues.Scenes.Questions.successfulPopupMessage + " " + String(viewModel.scoresOnQuiz) + " " + LabelValues.Scenes.Questions.points,
+                         buttonTitle: buttonTitle)
+        
+        viewModel.totalScores += coins
+        
+        scoresLabel.text = String(viewModel.totalScores) + " Points"
+        
+        if !questionIsLast {
+            questionLabel.text = question
+            answersCollectionView.reloadData()
+        } else {
+            overLayer.didSendEventClosure = { [weak self] event in
+           switch event {
+           case .hide:
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                        //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
+                        self?.didSendEventClosure?(.goBack)
+                    }
+                }
+            }
+        }
+    }
+    
+    internal func handleInCorrectAnswerTap(withQuestion question: String?,
+                                           buttonTitle: String,
+                                           questionIsLast: Bool) {
+        
+        let overLayer = QSDialogVC()
+        overLayer.appear(onSender: self,
+                         withTitle: LabelValues.Scenes.Questions.unSuccessfulPopupTitle,
+                         message: LabelValues.Scenes.Questions.unSuccessfulPopupMessage, 
+                         buttonTitle: buttonTitle)
+        
+        if !questionIsLast {
+            questionLabel.text = question
+            answersCollectionView.reloadData()
+        } else {
+            overLayer.didSendEventClosure = { [weak self] event in
+           switch event {
+           case .hide:
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                        //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
+                        self?.didSendEventClosure?(.goBack)
+                    }
+                }
+            }
+        }
+    }
+    
+    internal func handleQuizCompletion(isCorrect: Bool, coins: Int, question: String?) {
+        if isCorrect {
+            handleCorrectAnswerTap(withCoins: coins,
+                                   question: question, 
+                                   buttonTitle: LabelValues.Scenes.Questions.complete, 
+                                   questionIsLast: true)
+        } else {
+            handleInCorrectAnswerTap(withQuestion: question,
+                                     buttonTitle: LabelValues.Scenes.Questions.complete,
+                                     questionIsLast: true)
+        }
     }
 }
 
 extension QuestionsVC {
     enum Event {
         case goBack
+        case quizCompleted
     }
     
     enum Constants {
         static let buttonSmallCornerRadius: CGFloat = 10
+        static let cardSmallCornerRadius: CGFloat = 12
     }
 }
+

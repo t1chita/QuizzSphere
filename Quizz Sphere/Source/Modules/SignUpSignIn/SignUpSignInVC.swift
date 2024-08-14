@@ -418,11 +418,11 @@ class SignUpSignInVC: UIViewController {
             self?.validatePassword()
         }), for: .editingDidEnd)
         
-        signUpButton.didSendEventClosure = {[weak self] in
+        signUpButton.didSendEventClosure = { [weak self] in
             self?.handleSignUpButtonTapped()
         }
         
-        chooseAnAvatarButton.didSendEventClosure = {[weak self] in
+        chooseAnAvatarButton.didSendEventClosure = { [weak self] in
             self?.handleAvatarsCardAnimation()
         }
         
