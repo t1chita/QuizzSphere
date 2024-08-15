@@ -29,8 +29,8 @@ extension QuestionsVC: UICollectionViewDelegate {
                     
                     self?.viewModel.setZeroToScore()
                 }
+                self?.viewModel.setPropertiesIfAnswerIsNotLast()
             }
-            viewModel.setPropertiesIfAnswerIsNotLast()
         } else {
             handleQuizCompletion(isCorrect: answer?.isCorrect ?? false,
                                  coins: viewModel.scoresOnQuiz,

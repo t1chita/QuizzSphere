@@ -10,6 +10,7 @@ import UIKit
 final class AnswersCell: UICollectionViewCell {
     //MARK: - Properties
     static let identifier: String = "AnswersCell"
+    
     //MARK: - UIComponents
     private lazy var customBackgroundView: QSCard = {
         let view = QSCard()
@@ -24,6 +25,7 @@ final class AnswersCell: UICollectionViewCell {
                         fontType: .regular)
         return label
     }()
+    
     //MARK: - Initialisation
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,8 +46,8 @@ final class AnswersCell: UICollectionViewCell {
         setCustomBackgroundView()
         setAnswerLabel()
     }
-    //MARK: - Set UI Components
     
+    //MARK: - Set UI Components
     private func setCustomBackgroundView() {
         addSubview(customBackgroundView)
         

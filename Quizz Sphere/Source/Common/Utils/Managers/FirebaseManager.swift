@@ -20,8 +20,14 @@ final class FirebaseManager {
                     avatarImageUrl: String,
                     completion: @escaping (Bool) -> Void) async throws {
         do {
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            let user = User(id: result.user.uid, nickName: nickName, email: email, avatarImageUrl: avatarImageUrl)
+            let result = try await Auth.auth().createUser(withEmail: email,
+                                                          password: password)
+            let user = User(id: result.user.uid,
+                            nickName: nickName,
+                            email: email,
+                            avatarImageUrl: avatarImageUrl,
+                            totalScores: 0)
+            
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             completion(true)
@@ -40,6 +46,17 @@ final class FirebaseManager {
         } catch {
             completion(false)
             print("DEBUG: Failed to sign in user with error \(error.localizedDescription)")
+        }
+    }
+    
+    func updateTotalScores(withScores score: Int, 
+                           onUserID id: String) async throws {
+        do {
+            try await Firestore.firestore().collection("users").document(id).updateData([
+                "totalScores": FieldValue.increment(Int64(score))
+            ])
+        } catch {
+            print("DEBUG: Failed to update totalScore with error \(error.localizedDescription)")
         }
     }
     

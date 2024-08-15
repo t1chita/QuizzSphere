@@ -371,8 +371,10 @@ extension QuestionsVC {
         
         viewModel.totalScores += coins
         
-        scoresLabel.text = String(viewModel.totalScores) + " Points"
+        UserManager.shared.updateTotalScore(withScores: coins)
         
+        scoresLabel.text = String(viewModel.totalScores) + " Points"
+   
         if !questionIsLast {
             questionLabel.text = question
             answersCollectionView.reloadData()

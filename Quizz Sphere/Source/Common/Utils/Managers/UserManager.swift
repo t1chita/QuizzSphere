@@ -27,4 +27,13 @@ final class UserManager {
             self.currentUser = user
         }
     }
+    
+    func updateTotalScore(withScores score: Int) {
+        currentUser?.totalScores = score
+        
+        Task {
+            try await FirebaseManager.shared.updateTotalScores(withScores: score,
+                                                               onUserID: currentUser!.id)
+        }
+    }
 }
