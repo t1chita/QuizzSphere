@@ -24,7 +24,7 @@ final class QuestionsViewModel {
     var totalTime: Int = 60 {
         didSet { scoresOnQuiz = GameManager.shared.getPoints(timeRemaining: totalTime) }
     }
-
+    
     //MARK: - Initialisation
     init(quiz: Quiz) {
         self.quiz = quiz

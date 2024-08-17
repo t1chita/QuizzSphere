@@ -52,6 +52,8 @@ public enum LabelValues {
             static let successfulPopupMessage: String = "You Earned"
             static let unSuccessfulPopupMessage: String = "You missed it this time. Better luck next time!"
             static let unSuccessfulPopupTitle: String = "Keep Going!✊"
+            static let missedPopupTitle: String = "Time's Up! 💣"
+            static let missedPopupMessage: String = "You didn't answer in time. Moving to the next question."
             static let points: String = "Points"
             static let next: String = "Next"
             static let complete: String = "Complete"

@@ -314,7 +314,7 @@ final class QuestionsVC: UIViewController {
     }
     
     internal func animateQuestionAndAnswers(completion: @escaping () -> Void) {
-        let animationDuration: TimeInterval = 1
+        let animationDuration: TimeInterval = 0.5
         
         
         UIView.animate(withDuration: animationDuration,
@@ -342,8 +342,33 @@ final class QuestionsVC: UIViewController {
     
     @objc private func updateTimer() {
         timerLabel.text = FormatterManager.shared.timeFormatted(viewModel.totalTime)
-        if viewModel.totalTime != 0 {
+        if viewModel.totalTime > 0 {
             viewModel.totalTime -= 1
+        } else if viewModel.totalTime == 0 {
+            let question = viewModel.quiz.questions?[viewModel.questionIndex]
+
+            if viewModel.questionIndex != 11 {
+                let nextQuestion = viewModel.quiz.questions?[viewModel.questionIndex + 1]
+                
+                viewModel.setPropertiesIfAnswerIsNotLast()
+                print("Time Is 0")
+
+                animateQuestionAndAnswers() { [weak self] in
+                    self?.handleTimeIsUpLogic(withQuestion: nextQuestion?.description,
+                                              buttonTitle: "Next",
+                                              questionIsLast: false)
+                }
+            } else {
+                animateQuestionAndAnswers() { [weak self] in
+                    self?.handleTimeIsUpLogic(withQuestion: question?.description,
+                                              buttonTitle: "Complete",
+                                              questionIsLast: true)
+                }
+                
+                if question?.id == 11 {
+                    timer.invalidate()
+                }
+            }
         } else {
             timer.invalidate()
         }
@@ -374,18 +399,39 @@ extension QuestionsVC {
         UserManager.shared.updateTotalScore(withScores: coins)
         
         scoresLabel.text = String(viewModel.totalScores) + " Points"
-   
+        
         if !questionIsLast {
             questionLabel.text = question
             answersCollectionView.reloadData()
         } else {
             overLayer.didSendEventClosure = { [weak self] event in
-           switch event {
-           case .hide:
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                        //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
-                        self?.didSendEventClosure?(.goBack)
-                    }
+                switch event {
+                case .hide:
+                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
+                    self?.didSendEventClosure?(.goBack)
+                }
+            }
+        }
+    }
+    
+    private func handleTimeIsUpLogic(withQuestion question: String?,
+                                     buttonTitle: String,
+                                     questionIsLast: Bool) {
+        let overLayer = QSDialogVC()
+        overLayer.appear(onSender: self,
+                         withTitle: LabelValues.Scenes.Questions.missedPopupTitle,
+                         message: LabelValues.Scenes.Questions.missedPopupMessage,
+                         buttonTitle: buttonTitle)
+        
+        if !questionIsLast {
+            questionLabel.text = question
+            answersCollectionView.reloadData()
+        } else {
+            overLayer.didSendEventClosure = { [weak self] event in
+                switch event {
+                case .hide:
+                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
+                    self?.didSendEventClosure?(.goBack)
                 }
             }
         }
@@ -398,7 +444,7 @@ extension QuestionsVC {
         let overLayer = QSDialogVC()
         overLayer.appear(onSender: self,
                          withTitle: LabelValues.Scenes.Questions.unSuccessfulPopupTitle,
-                         message: LabelValues.Scenes.Questions.unSuccessfulPopupMessage, 
+                         message: LabelValues.Scenes.Questions.unSuccessfulPopupMessage,
                          buttonTitle: buttonTitle)
         
         if !questionIsLast {
@@ -406,12 +452,10 @@ extension QuestionsVC {
             answersCollectionView.reloadData()
         } else {
             overLayer.didSendEventClosure = { [weak self] event in
-           switch event {
-           case .hide:
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                        //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
-                        self?.didSendEventClosure?(.goBack)
-                    }
+                switch event {
+                case .hide:
+                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
+                    self?.didSendEventClosure?(.goBack)
                 }
             }
         }
@@ -420,8 +464,8 @@ extension QuestionsVC {
     internal func handleQuizCompletion(isCorrect: Bool, coins: Int, question: String?) {
         if isCorrect {
             handleCorrectAnswerTap(withCoins: coins,
-                                   question: question, 
-                                   buttonTitle: LabelValues.Scenes.Questions.complete, 
+                                   question: question,
+                                   buttonTitle: LabelValues.Scenes.Questions.complete,
                                    questionIsLast: true)
         } else {
             handleInCorrectAnswerTap(withQuestion: question,
