@@ -80,8 +80,29 @@ class TabBarCoordinator: NSObject, Coordinator {
                     let questionsViewModel = QuestionsViewModel(quiz: quiz)
                     let questionsVC = QuestionsVC(viewModel: questionsViewModel)
                     
-                    questionsVC.didSendEventClosure = { event in
-                        navController.popViewController(animated: true)
+                    questionsVC.didSendEventClosure = { event, scores, completedQuantity, quantity in
+                        switch event {
+                        case .goBack:
+                            navController.popViewController(animated: true)
+                        
+                        case .quizCompleted:
+                            let resultViewModel = ResultViewModel(userPoints: scores ?? 0,
+                                                                  quizQuantity: quantity ?? 0,
+                                                                  completedQuizQuantity: completedQuantity ?? 0)
+                            
+                            let resultVC = ResultVC(viewModel: resultViewModel)
+                            
+                            resultVC.didSendEventClosure = { event in
+                                switch event {
+                                case .goBack:
+                                    navController.popToRootViewController(animated: true)
+                                case .shareResult:
+                                    print("Share Result")
+                                }
+                            }
+                            
+                            navController.pushViewController(resultVC, animated: true)
+                        }
                     }
 
                     print(quiz.name)

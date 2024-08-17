@@ -11,7 +11,7 @@ final class QuestionsVC: UIViewController {
     //MARK: - Properties
     let viewModel: QuestionsViewModel
     
-    var didSendEventClosure: ((QuestionsVC.Event) -> Void)?
+    var didSendEventClosure: ((QuestionsVC.Event, Int?, Int?, Int?) -> Void)?
     
     private lazy var timer: Timer = {
         let timer = Timer()
@@ -206,7 +206,7 @@ final class QuestionsVC: UIViewController {
         }), for: .touchUpInside)
         
         goBackButton.addAction(UIAction(title: "Go Back To Home Page", handler: { [weak self] _ in
-            self?.didSendEventClosure?(.goBack)
+            self?.didSendEventClosure?(.goBack, nil, nil, nil)
         }), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
@@ -351,7 +351,6 @@ final class QuestionsVC: UIViewController {
                 let nextQuestion = viewModel.quiz.questions?[viewModel.questionIndex + 1]
                 
                 viewModel.setPropertiesIfAnswerIsNotLast()
-                print("Time Is 0")
 
                 animateQuestionAndAnswers() { [weak self] in
                     self?.handleTimeIsUpLogic(withQuestion: nextQuestion?.description,
@@ -388,13 +387,14 @@ extension QuestionsVC {
                                          question: String?,
                                          buttonTitle: String,
                                          questionIsLast: Bool) {
+    
         let overLayer = QSDialogVC()
         overLayer.appear(onSender: self,
                          withTitle: LabelValues.Scenes.Questions.successfulPopupTitle,
                          message: LabelValues.Scenes.Questions.successfulPopupMessage + " " + String(viewModel.scoresOnQuiz) + " " + LabelValues.Scenes.Questions.points,
                          buttonTitle: buttonTitle)
         
-        viewModel.totalScores += coins
+        viewModel.answerIsCorrect(withCoins: coins)
         
         UserManager.shared.updateTotalScore(withScores: coins)
         
@@ -407,8 +407,8 @@ extension QuestionsVC {
             overLayer.didSendEventClosure = { [weak self] event in
                 switch event {
                 case .hide:
-                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
-                    self?.didSendEventClosure?(.goBack)
+                    self?.timer.invalidate()
+                    self?.didSendEventClosure?(.quizCompleted, self?.viewModel.totalScores, self?.viewModel.completedQuestionsQuantity, self?.viewModel.quiz.quantity)
                 }
             }
         }
@@ -417,6 +417,7 @@ extension QuestionsVC {
     private func handleTimeIsUpLogic(withQuestion question: String?,
                                      buttonTitle: String,
                                      questionIsLast: Bool) {
+        
         let overLayer = QSDialogVC()
         overLayer.appear(onSender: self,
                          withTitle: LabelValues.Scenes.Questions.missedPopupTitle,
@@ -430,8 +431,8 @@ extension QuestionsVC {
             overLayer.didSendEventClosure = { [weak self] event in
                 switch event {
                 case .hide:
-                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
-                    self?.didSendEventClosure?(.goBack)
+                    self?.timer.invalidate()
+                    self?.didSendEventClosure?(.quizCompleted, self?.viewModel.totalScores, self?.viewModel.completedQuestionsQuantity, self?.viewModel.quiz.quantity)
                 }
             }
         }
@@ -454,8 +455,8 @@ extension QuestionsVC {
             overLayer.didSendEventClosure = { [weak self] event in
                 switch event {
                 case .hide:
-                    //TODO: Change goBack with QuizCompleted and navigate to new VC congratulationsVC
-                    self?.didSendEventClosure?(.goBack)
+                    self?.timer.invalidate()
+                    self?.didSendEventClosure?(.quizCompleted, self?.viewModel.totalScores, self?.viewModel.completedQuestionsQuantity, self?.viewModel.quiz.quantity)
                 }
             }
         }

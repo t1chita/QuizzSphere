@@ -21,6 +21,8 @@ final class QuestionsViewModel {
     
     var totalScores: Int = 0
     
+    var completedQuestionsQuantity: Int = 0
+    
     var totalTime: Int = 60 {
         didSet { scoresOnQuiz = GameManager.shared.getPoints(timeRemaining: totalTime) }
     }
@@ -44,6 +46,10 @@ final class QuestionsViewModel {
         questionIndex += 1
     }
     
+    func answerIsCorrect(withCoins coins: Int) {
+       totalScores += coins
+       completedQuestionsQuantity += 1
+    }
     //MARK: - Requests
     
     //MARK: - Navigation

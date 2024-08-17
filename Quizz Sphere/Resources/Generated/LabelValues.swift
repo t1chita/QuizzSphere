@@ -58,5 +58,15 @@ public enum LabelValues {
             static let next: String = "Next"
             static let complete: String = "Complete"
         }
+        
+        public enum Result {
+            static let quizResult: String = "Quiz Result"
+            static let congratulations: String = "Congratulations"
+            static let quizIsCompletedTextPartOne: String = "You've completed the quiz with"
+            static let quizIsCompletedTextPartTwo: String = "points! Keep challenging yourself and aim even higher next time!"
+            static let completedTasks: String = "Completed Tasks"
+            static let shareResults: String = "Share Results"
+            static let takeNewQuiz: String = "Take New Quiz"
+        }
     }
 }
