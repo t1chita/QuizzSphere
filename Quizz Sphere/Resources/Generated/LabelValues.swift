@@ -67,6 +67,10 @@ public enum LabelValues {
             static let completedTasks: String = "Completed Tasks"
             static let shareResults: String = "Share Results"
             static let takeNewQuiz: String = "Take New Quiz"
+        }   
+        
+        public enum Search {
+            static let title: String = "Search"
         }
     }
 }

@@ -27,19 +27,31 @@ class TabBarCoordinator: NSObject, Coordinator {
     var type: CoordinatorType { .tab }
     
     var tabBarController: UITabBarController
-
+    
+    let btnMiddle : UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        btn.setTitle("", for: .normal)
+        btn.backgroundColor = .blueCard
+        btn.layer.cornerRadius = 30
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOpacity = 0.2
+        btn.layer.shadowOffset = CGSize(width: 4, height: 4)
+        btn.setBackgroundImage(UIImage(systemName: "plus"), for: .normal)
         
+        return btn
+    }()
+    
     required init(_ navigationController: UINavigationController) {
         self.navigationController  = navigationController
         self.tabBarController = .init()
     }
     
     func start() {
-        let pages: [TabBarPage] = [.home, .leaderBoard, .profile]
+        let pages: [TabBarPage] = [.home, .search, .leaderBoard, .profile]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         
         let controllers: [UINavigationController] = pages.map({getTabController($0)})
-    
+        
         prepareTabBarController(withTabControllers: controllers)
     }
     
@@ -48,6 +60,9 @@ class TabBarCoordinator: NSObject, Coordinator {
     }
     
     private func prepareTabBarController(withTabControllers tabControllers: [UIViewController]) {
+        let path : UIBezierPath = getPathForTabBar()
+        let shape = CAShapeLayer()
+        
         tabBarController.delegate = self
         
         tabBarController.setViewControllers(tabControllers, animated: true)
@@ -56,8 +71,29 @@ class TabBarCoordinator: NSObject, Coordinator {
         
         tabBarController.tabBar.isTranslucent = false
         
-        navigationController.viewControllers = [tabBarController]
+        btnMiddle.frame = CGRect(x: Int(tabBarController.tabBar.bounds.width)/2 - 30, y: -20, width: 60, height: 60)
         
+        shape.path = path.cgPath
+        shape.lineWidth = 3
+        shape.strokeColor = UIColor.customBackground.cgColor
+        shape.fillColor = UIColor.customBackground.cgColor
+        
+        tabBarController.tabBar.layer.insertSublayer(shape, at: 0)
+        tabBarController.tabBar.itemWidth = 40
+        tabBarController.tabBar.itemPositioning = .centered
+        tabBarController.tabBar.itemSpacing = 180
+        tabBarController.tabBar.tintColor = .pinkCard
+        
+        tabBarController.tabBar.backgroundColor = .blueCard
+        
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.tabBar.addSubview(btnMiddle)
+        
+        btnMiddle.addAction(UIAction(handler: { _ in
+            print("DEBUG: Plus Button Tapped")
+        }), for: .touchUpInside)
+        
+        navigationController.viewControllers = [tabBarController]
     }
     
     private func getTabController(_ page: TabBarPage) -> UINavigationController {
@@ -84,7 +120,7 @@ class TabBarCoordinator: NSObject, Coordinator {
                         switch event {
                         case .goBack:
                             navController.popViewController(animated: true)
-                        
+                            
                         case .quizCompleted:
                             let resultViewModel = ResultViewModel(userPoints: scores ?? 0,
                                                                   quizQuantity: quantity ?? 0,
@@ -104,13 +140,18 @@ class TabBarCoordinator: NSObject, Coordinator {
                             navController.pushViewController(resultVC, animated: true)
                         }
                     }
-
+                    
                     print(quiz.name)
                     navController.pushViewController(questionsVC, animated: true )
                 }
             }
             
             navController.pushViewController(homeVC, animated: true)
+        case .search:
+            let searchViewModel = SearchViewModel()
+            let searchVC = SearchVC(viewModel: searchViewModel)
+            
+            navController.pushViewController(searchVC, animated: true)
         case .leaderBoard:
             let leaderBoardViewModel = LeaderBoardViewModel()
             let leaderBoardVC = LeaderBoardVC(leaderBoardViewModel: leaderBoardViewModel)
@@ -127,14 +168,37 @@ class TabBarCoordinator: NSObject, Coordinator {
     }
     
     func currentPage() -> TabBarPage? { TabBarPage.init(index: tabBarController.selectedIndex) }
-
+    
     func selectPage(_ page: TabBarPage) { tabBarController.selectedIndex = page.pageOrderNumber() }
     
     func setSelectedIndex(_ index: Int) {
-           guard let page = TabBarPage.init(index: index) else { return }
-           
-           tabBarController.selectedIndex = page.pageOrderNumber()
-       }
+        guard let page = TabBarPage.init(index: index) else { return }
+        
+        tabBarController.selectedIndex = page.pageOrderNumber()
+    }
+    
+    func getPathForTabBar() -> UIBezierPath {
+        let frameWidth = self.tabBarController.tabBar.bounds.width
+        let frameHeight = self.tabBarController.tabBar.bounds.height + 40
+        let holeWidth = 150
+        let holeHeight = 50
+        let leftXUntilHole = Int(frameWidth/2) - Int(holeWidth/2)
+        
+        let path : UIBezierPath = UIBezierPath()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: leftXUntilHole , y: 0)) // 1.Line
+        path.addCurve(to: CGPoint(x: leftXUntilHole + (holeWidth/3), y: holeHeight/2), controlPoint1: CGPoint(x: leftXUntilHole + ((holeWidth/3)/8)*6,y: 0), controlPoint2: CGPoint(x: leftXUntilHole + ((holeWidth/3)/8)*8, y: holeHeight/2)) // part I
+        
+        path.addCurve(to: CGPoint(x: leftXUntilHole + (2*holeWidth)/3, y: holeHeight/2), controlPoint1: CGPoint(x: leftXUntilHole + (holeWidth/3) + (holeWidth/3)/3*2/5, y: (holeHeight/2)*6/4), controlPoint2: CGPoint(x: leftXUntilHole + (holeWidth/3) + (holeWidth/3)/3*2 + (holeWidth/3)/3*3/5, y: (holeHeight/2)*6/4)) // part II
+        
+        path.addCurve(to: CGPoint(x: leftXUntilHole + holeWidth, y: 0), controlPoint1: CGPoint(x: leftXUntilHole + (2*holeWidth)/3,y: holeHeight/2), controlPoint2: CGPoint(x: leftXUntilHole + (2*holeWidth)/3 + (holeWidth/3)*2/8, y: 0)) // part III
+        path.addLine(to: CGPoint(x: frameWidth, y: 0)) // 2. Line
+        path.addLine(to: CGPoint(x: frameWidth, y: frameHeight)) // 3. Line
+        path.addLine(to: CGPoint(x: 0, y: frameHeight)) // 4. Line
+        path.addLine(to: CGPoint(x: 0, y: 0)) // 5. Line
+        path.close()
+        return path
+    }
 }
 extension TabBarCoordinator: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController,

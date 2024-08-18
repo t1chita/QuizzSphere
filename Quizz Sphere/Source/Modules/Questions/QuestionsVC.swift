@@ -172,9 +172,7 @@ final class QuestionsVC: UIViewController {
         scoresBackgroundView.round(corners: [.bottomRight, .topRight],
                                    radius: Constants.cardSmallCornerRadius)
     }
-    
-    //MARK: - Delegates
-    
+        
     //MARK: - Setup UI
     private func setupUI() {
         setMainView()

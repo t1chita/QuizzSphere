@@ -88,6 +88,7 @@ final class ResultVC: UIViewController {
                          cornerRadius: Constants.smallButtonCornerRadius)
         return button
     }()
+    
     //MARK: - Initialisation
     init(viewModel: ResultViewModel) {
         self.viewModel = viewModel
@@ -103,9 +104,7 @@ final class ResultVC: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-    
-    //MARK: - Delegates
-    
+        
     //MARK: - Setup UI
     private func setupUI() {
         setMainView()

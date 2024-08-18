@@ -9,6 +9,7 @@ import UIKit
 
 enum TabBarPage {
     case home
+    case search
     case leaderBoard
     case profile
 
@@ -17,8 +18,10 @@ enum TabBarPage {
         case 0:
             self = .home
         case 1:
-            self = .leaderBoard
+            self = .search
         case 2:
+            self = .leaderBoard
+        case 3:
             self = .profile
         default:
             return nil
@@ -29,6 +32,8 @@ enum TabBarPage {
         switch self {
         case .home:
             return "Home"
+        case .search:
+            return "Search"
         case .leaderBoard:
             return "Leaderboard"
         case .profile:
@@ -40,10 +45,12 @@ enum TabBarPage {
         switch self {
         case .home:
             return 0
-        case .leaderBoard:
+        case .search:
             return 1
-        case .profile:
+        case .leaderBoard:
             return 2
+        case .profile:
+            return 3
         }
     }
 
@@ -55,6 +62,8 @@ enum TabBarPage {
             return  UIImage(systemName: "trophy.fill")!
         case .profile:
             return  UIImage(systemName: "person.fill")!
+        case .search:
+            return  UIImage(systemName: "magnifyingglass")!
         }
     }
     // Add tab icon value
