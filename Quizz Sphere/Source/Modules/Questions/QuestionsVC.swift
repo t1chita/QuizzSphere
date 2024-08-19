@@ -55,7 +55,7 @@ final class QuestionsVC: UIViewController {
     
     private lazy var questionLabel: QSLabel = {
         let label = QSLabel()
-        label.configure(with: viewModel.quiz.questions?.first?.description)
+        label.configure(with: viewModel.quiz.questions.first?.description)
         return label
     }()
     
@@ -343,26 +343,26 @@ final class QuestionsVC: UIViewController {
         if viewModel.totalTime > 0 {
             viewModel.totalTime -= 1
         } else if viewModel.totalTime == 0 {
-            let question = viewModel.quiz.questions?[viewModel.questionIndex]
+            let question = viewModel.quiz.questions[viewModel.questionIndex]
 
             if viewModel.questionIndex != 11 {
-                let nextQuestion = viewModel.quiz.questions?[viewModel.questionIndex + 1]
+                let nextQuestion = viewModel.quiz.questions[viewModel.questionIndex + 1]
                 
                 viewModel.setPropertiesIfAnswerIsNotLast()
 
                 animateQuestionAndAnswers() { [weak self] in
-                    self?.handleTimeIsUpLogic(withQuestion: nextQuestion?.description,
+                    self?.handleTimeIsUpLogic(withQuestion: nextQuestion.description,
                                               buttonTitle: "Next",
                                               questionIsLast: false)
                 }
             } else {
                 animateQuestionAndAnswers() { [weak self] in
-                    self?.handleTimeIsUpLogic(withQuestion: question?.description,
+                    self?.handleTimeIsUpLogic(withQuestion: question.description,
                                               buttonTitle: "Complete",
                                               questionIsLast: true)
                 }
                 
-                if question?.id == 11 {
+                if question.id == 11 {
                     timer.invalidate()
                 }
             }

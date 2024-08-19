@@ -10,20 +10,20 @@ import UIKit
 extension QuestionsVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let question = viewModel.quiz.questions?[viewModel.questionIndex]
+        let question = viewModel.quiz.questions[viewModel.questionIndex]
         
-        let answer = question?.answers[indexPath.row]
+        let answer = question.answers[indexPath.row]
         
         if viewModel.questionIndex != 11 {
-            let nextQuestion = viewModel.quiz.questions?[viewModel.questionIndex + 1]
+            let nextQuestion = viewModel.quiz.questions[viewModel.questionIndex + 1]
             animateQuestionAndAnswers() { [weak self] in
-                if answer?.isCorrect == true {
+                if answer.isCorrect == true {
                     self?.handleCorrectAnswerTap(withCoins:  self?.viewModel.scoresOnQuiz ?? 0,
-                                           question: nextQuestion?.description ?? "",
+                                           question: nextQuestion.description,
                                            buttonTitle: LabelValues.Scenes.Questions.next,
                                            questionIsLast: false)
                 } else {
-                    self?.handleInCorrectAnswerTap(withQuestion: nextQuestion?.description ?? "",
+                    self?.handleInCorrectAnswerTap(withQuestion: nextQuestion.description,
                                              buttonTitle: LabelValues.Scenes.Questions.next,
                                              questionIsLast: false)
                     
@@ -32,9 +32,9 @@ extension QuestionsVC: UICollectionViewDelegate {
                 self?.viewModel.setPropertiesIfAnswerIsNotLast()
             }
         } else {
-            handleQuizCompletion(isCorrect: answer?.isCorrect ?? false,
+            handleQuizCompletion(isCorrect: answer.isCorrect,
                                  coins: viewModel.scoresOnQuiz,
-                                 question: question?.description ?? "")
+                                 question: question.description)
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
@@ -49,9 +49,9 @@ extension QuestionsVC: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AnswersCell.identifier, for: indexPath) as! AnswersCell
         let questionIndex = viewModel.questionIndex
         
-        let answer = viewModel.quiz.questions?[questionIndex].answers[indexPath.row]
+        let answer = viewModel.quiz.questions[questionIndex].answers[indexPath.row]
         
-        cell.configure(withAnswer: answer!)
+        cell.configure(withAnswer: answer)
         
         return cell
     }

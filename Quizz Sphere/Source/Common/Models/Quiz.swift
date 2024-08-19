@@ -13,7 +13,7 @@ struct Quiz: Codable {
     let name: String
     let category: String
     let quantity: Int
-    let questions: [Question]?
+    let questions: [Question]
 }
 
 struct Question: Codable {
