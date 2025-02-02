@@ -24,13 +24,13 @@ public struct GreetingLogic {
         
         switch hour {
         case newDay ..< noon:
-            greetingText = LabelValues.Scenes.SignInSignUp.goodMorning
+            greetingText = LabelValues.Scenes.Home.goodMorning
         case noon ..< sunset:
-            greetingText = LabelValues.Scenes.SignInSignUp.goodAfternoon
+            greetingText = LabelValues.Scenes.Home.goodAfternoon
         case sunset ..< midnight:
-            greetingText = LabelValues.Scenes.SignInSignUp.goodEvening
+            greetingText = LabelValues.Scenes.Home.goodEvening
         default:
-            greetingText = LabelValues.Scenes.SignInSignUp.greeting
+            greetingText = LabelValues.Scenes.Home.greeting
         }
         
         return greetingText

@@ -9,7 +9,7 @@ import UIKit
 
 class SignUpSignInVC: UIViewController {
     //MARK: - Properties
-    private var signUpSignInViewModel: SignUpSignInViewModel
+    var signUpSignInViewModel: SignUpSignInViewModel
     
     var didSendEventClosure: ((SignUpSignInVC.Event) -> Void)?
     
@@ -33,6 +33,7 @@ class SignUpSignInVC: UIViewController {
         segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.logIn,
                                        at: 0,
                                        animated: false)
+        
         segmentedControl.insertSegment(withTitle: LabelValues.Scenes.SignInSignUp.signUp,
                                        at: 1,
                                        animated: false)
@@ -43,7 +44,7 @@ class SignUpSignInVC: UIViewController {
             NSAttributedString.Key.font:  AppConstants.Font.EBGaramond.bold as Any], for: .normal)
         
         segmentedControl.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.customCardColors,
+            NSAttributedString.Key.foregroundColor: UIColor.blueCard,
             NSAttributedString.Key.font: AppConstants.Font.EBGaramond.bold as Any], for: .selected)
         
         //Set SegmentedControl Colors To Clear
@@ -62,13 +63,17 @@ class SignUpSignInVC: UIViewController {
     
     private lazy var bottomUnderlineView: UIView = {
         let underlineView = UIView()
-        underlineView.backgroundColor = .customCardColors
+        underlineView.backgroundColor = .blueCard
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         return underlineView
     }()
     
     private lazy var leadingDistanceConstraint: NSLayoutConstraint = {
         return bottomUnderlineView.leftAnchor.constraint(equalTo: segmentedControl.leftAnchor)
+    }()
+    
+    private lazy var chooseAnAvatarCardBottomConstraint: NSLayoutConstraint = { [weak self] in
+        return self!.chooseAnAvatarCard.bottomAnchor.constraint(equalTo: self!.view.bottomAnchor, constant: 200)
     }()
     
     private lazy var signInFormStackView: QSVerticalStackView = {
@@ -203,6 +208,45 @@ class SignUpSignInVC: UIViewController {
         return signUpPasswordValidateLabel
     }()
     
+    private lazy var chooseAnAvatarButton: QSButton = {
+        let button = QSButton()
+        button.configure(with: LabelValues.Scenes.SignInSignUp.chooseAnAvatar,
+                         fontType: .regular,
+                         backgroundColor: .clear,
+                         cornerRadius: 0)
+        return button
+    }()
+    
+    internal lazy var chooseAnAvatarCard: QSCard = {
+        let view = QSCard()
+        view.configure(backgroundColor: .blueCard)
+        return view
+    }()
+    
+    private lazy var chooseAnAvatarLabel: QSLabel = {
+        let label = QSLabel()
+        label.configure(with: LabelValues.Scenes.SignInSignUp.chooseAnAvatar,
+                        fontType: .bold,
+                        textAlignment: .center,
+                        textColor: .primaryText)
+        return label
+    }()
+    
+    private lazy var avatarsCollectionView: UICollectionView = {
+        let collectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionViewFlowLayout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(AvatarsCell.self, forCellWithReuseIdentifier: AvatarsCell.identifier)
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
+    }()
+    
     private lazy var signUpButton: QSButton = {
         let button = QSButton()
         button.configure(with: LabelValues.Scenes.SignInSignUp.signUp,
@@ -225,21 +269,44 @@ class SignUpSignInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        addHideKeyboardTapGestureRecogniser()
+        setupBindings()
+        getDelegates()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        chooseAnAvatarCard.round(corners: [.topLeft, .topRight],
+                                 radius: Constants.cardSmallCornerRadius)
     }
     
     //MARK: - Delegates
+    private func getDelegates() {
+        getTextFieldDelegates()
+    }
     
+    private func getTextFieldDelegates() {
+        signUpEmailTextField.delegate = self
+        signUpPasswordTextField.delegate = self
+        signUpNickNameTextField.delegate = self
+        signInPasswordTextField.delegate = self
+        signInEmailTextField.delegate = self
+    }
     //MARK: - Setup UI
     private func setupUI() {
         setUpMainView()
+        
         setTitleLabel()
         setSegmentedControlContainerView()
         setSegmentedControl()
         setBottomUnderLineView()
+        
         setFormStackView()
         setPasswordFunctionalityStackView()
         setSignUpStackView()
+        
+        setChooseAnAvatarCard()
+        setChooseAnAvatarLabel()
+        setAvatarsCollectionView()
     }
     
     //MARK: - Set UI Components
@@ -329,12 +396,13 @@ class SignUpSignInVC: UIViewController {
         signUpFormStackView.addArrangedSubview(signUpNickNameValidateLabel)
         signUpFormStackView.addArrangedSubview(signUpPasswordTextField)
         signUpFormStackView.addArrangedSubview(signUpPasswordValidateLabel)
+        signUpFormStackView.addArrangedSubview(chooseAnAvatarButton)
         signUpFormStackView.addArrangedSubview(signUpButton)
         
         signUpEmailValidateLabel.isHidden = true
         signUpNickNameValidateLabel.isHidden = true
         signUpPasswordValidateLabel.isHidden = true
-
+        
         signUpEmailTextField.addAction(UIAction(handler: { [weak self] _ in
             self?.signUpSignInViewModel.signupEmail = self?.signUpEmailTextField.text ?? ""
             self?.validateEmail()
@@ -350,14 +418,51 @@ class SignUpSignInVC: UIViewController {
             self?.validatePassword()
         }), for: .editingDidEnd)
         
-        signUpButton.didSendEventClosure = {[weak self] in
+        signUpButton.didSendEventClosure = { [weak self] in
             self?.handleSignUpButtonTapped()
+        }
+        
+        chooseAnAvatarButton.didSendEventClosure = { [weak self] in
+            self?.handleAvatarsCardAnimation()
         }
         
         NSLayoutConstraint.activate([
             signUpFormStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signUpFormStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             signUpFormStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+        ])
+    }
+    
+    private func setChooseAnAvatarCard() {
+        view.addSubview(chooseAnAvatarCard)
+        
+        NSLayoutConstraint.activate([
+            chooseAnAvatarCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            chooseAnAvatarCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            chooseAnAvatarCard.heightAnchor.constraint(equalToConstant: 200),
+            chooseAnAvatarCardBottomConstraint,
+        ])
+    }
+    
+    private func setChooseAnAvatarLabel() {
+        chooseAnAvatarCard.addSubview(chooseAnAvatarLabel)
+        
+        NSLayoutConstraint.activate([
+            chooseAnAvatarLabel.topAnchor.constraint(equalTo: chooseAnAvatarCard.topAnchor, constant: 16),
+            chooseAnAvatarLabel.leadingAnchor.constraint(equalTo: chooseAnAvatarCard.leadingAnchor),
+            chooseAnAvatarLabel.trailingAnchor.constraint(equalTo: chooseAnAvatarCard.trailingAnchor),
+            chooseAnAvatarLabel.heightAnchor.constraint(equalToConstant: 20),
+        ])
+    }
+    
+    private func setAvatarsCollectionView() {
+        chooseAnAvatarCard.addSubview(avatarsCollectionView)
+        
+        NSLayoutConstraint.activate([
+            avatarsCollectionView.topAnchor.constraint(equalTo: chooseAnAvatarLabel.bottomAnchor),
+            avatarsCollectionView.leadingAnchor.constraint(equalTo: chooseAnAvatarCard.leadingAnchor),
+            avatarsCollectionView.trailingAnchor.constraint(equalTo: chooseAnAvatarCard.trailingAnchor),
+            avatarsCollectionView.bottomAnchor.constraint(equalTo: chooseAnAvatarCard.bottomAnchor)
         ])
     }
     
@@ -421,6 +526,34 @@ class SignUpSignInVC: UIViewController {
             self?.view.layoutIfNeeded()
         })
     }
+    
+    
+    
+    internal func handleAvatarsCardAnimation() {
+        signUpSignInViewModel.toggleIsAvatarCardExpanded()
+        
+        let newBottomAnchorConstant: CGFloat = signUpSignInViewModel.isAvatarCardExpanded ? 0 : 400
+        
+        // Ensure consistent animation duration
+        let animationDuration: TimeInterval = 0.3
+        
+        UIView.animate(withDuration: animationDuration,
+                       animations: { [weak self] in
+            
+            self?.chooseAnAvatarCardBottomConstraint.constant = newBottomAnchorConstant
+            self?.view.layoutIfNeeded()
+        })
+    }
+}
+
+extension SignUpSignInVC {
+    func setupBindings() {
+        signUpSignInViewModel.onAvatarsChanged = {[weak self] in
+            DispatchQueue.main.async { [weak self] in
+                self?.avatarsCollectionView.reloadData()
+            }
+        }
+    }
 }
 
 //MARK: - Actions
@@ -441,7 +574,7 @@ extension SignUpSignInVC {
     }
     
     private func handleLoginButtonTapped() {
-        setViewModelSignUInProperties()
+        setViewModelSignInProperties()
         signUpSignInViewModel.signIn { [weak self] success in
             DispatchQueue.main.async { [weak self] in
                 switch success {
@@ -463,9 +596,9 @@ extension SignUpSignInVC {
         signUpSignInViewModel.signUpPassword = signUpPasswordTextField.text ?? ""
         
         print("DEBUG: Set view model properties - Email: \(signUpSignInViewModel.signupEmail), Nickname: \(signUpSignInViewModel.signUpNickname), Password: \(signUpSignInViewModel.signUpPassword)")
-    }  
+    }
     
-    private func setViewModelSignUInProperties() {
+    private func setViewModelSignInProperties() {
         signUpSignInViewModel.signInEmail = signInEmailTextField.text ?? ""
         signUpSignInViewModel.signInPassword = signInPasswordTextField.text ?? ""
         
@@ -487,5 +620,6 @@ extension SignUpSignInVC {
         static let verticalStackViewSpacing: CGFloat = 20
         static let horizontalStackViewSpacing: CGFloat = 4
         static let buttonCornerRadius: CGFloat = 4
+        static let cardSmallCornerRadius: CGFloat = 10
     }
 }

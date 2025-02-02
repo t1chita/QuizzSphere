@@ -11,4 +11,6 @@ struct User: Codable, Identifiable {
     let id: String
     let nickName: String
     let email: String
+    let avatarImageUrl: String
+    var totalScores: Int
 }

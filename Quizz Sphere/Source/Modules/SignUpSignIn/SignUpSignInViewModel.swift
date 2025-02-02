@@ -14,6 +14,15 @@ final class SignUpSignInViewModel {
     var signUpPassword: String = ""
     var signUpNickname: String = ""
     var signupEmail: String = ""
+    var signupAvatarImageUrl: String = ""
+    
+    var avatars: [Avatar] = [] {
+        didSet { onAvatarsChanged?() }
+    }
+    
+    var avatarsCount: Int {
+        avatars.count
+    }
     
     var isEmailValid: Bool {
         ValidationManager.shared.isEmailValid(signupEmail)
@@ -25,6 +34,22 @@ final class SignUpSignInViewModel {
     
     var isPasswordValid: Bool {
         ValidationManager.shared.isPasswordValid(signUpPassword)
+    }   
+    
+    var isAvatarImageUrlValid: Bool {
+        ValidationManager.shared.isStringEmpty(signupAvatarImageUrl)
+    }  
+    
+    var isAvatarCardExpanded: Bool = false
+    
+    var onAvatarsChanged: (() -> Void)?
+    
+    init() {
+        getAvatars()
+    }
+    
+    func toggleIsAvatarCardExpanded() {
+        isAvatarCardExpanded.toggle()
     }
     
     func isInputValid(forType type: ValidationType) -> String {
@@ -39,16 +64,17 @@ final class SignUpSignInViewModel {
     }
     
     func createUser(completion: @escaping (Bool) -> Void) {
-        if isEmailValid && isNicknameValid && isPasswordValid {
+        if isEmailValid && isNicknameValid && isPasswordValid && isAvatarImageUrlValid {
             print("DEBUG: Validation passed")
             Task {
                 try await FirebaseManager.shared.createUser(withEmail: signupEmail, 
                                                             nickName: signUpNickname,
-                                                            password: signUpPassword) { success in
+                                                            password: signUpPassword,
+                                                            avatarImageUrl: signupAvatarImageUrl) { success in
                     switch success {
                     case true:
                         completion(true)
-                        print("DEBUG: User Saved On On Firebase")
+                        print("DEBUG: User Saved On Firebase")
                     case false:
                         completion(false)
                         print("DEBUG: Can't Save User On Firebase")
@@ -56,7 +82,7 @@ final class SignUpSignInViewModel {
                 }
             }
         } else {
-            print("DEBUG: Validation failed - Email: \(isEmailValid), Nickname: \(isNicknameValid), Password: \(isPasswordValid)")
+            print("DEBUG: Validation failed - Email: \(isEmailValid), Nickname: \(isNicknameValid), Password: \(isPasswordValid), AvatarUrl: \(signupAvatarImageUrl)")
         }
     }
     
@@ -75,6 +101,15 @@ final class SignUpSignInViewModel {
                 
             }
         }
-        
+    }
+    
+    private func getAvatars() {
+        FirebaseManager.shared.getDocuments(from: "avatars") { [weak self] (avatars: [Avatar]?, error) in
+            if error == nil {
+                self?.avatars = avatars ?? []
+            } else {
+                print("DEBUG: Get Avatars Error In ViewModel \(String(describing: error?.localizedDescription))")
+            }
+        }
     }
 }

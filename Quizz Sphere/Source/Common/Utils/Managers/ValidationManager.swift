@@ -50,4 +50,12 @@ final class ValidationManager {
         print("DEBUG: Password validation for \(password)")
         return passwordPredicate.evaluate(with: password)
     }
+    
+    func isStringEmpty(_ string: String) -> Bool {
+        if string.isEmpty {
+            return false
+        } else {
+            return true
+        }
+    }
 }

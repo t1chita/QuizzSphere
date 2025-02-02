@@ -23,8 +23,11 @@ final class QSButton: UIButton {
                           fontType: AppConstants.Font.FontType = .bold,
                           contentAlignment: ContentHorizontalAlignment = .center,
                           textColor: UIColor = .primaryText,
-                          backgroundColor: UIColor = .customCardColors,
-                          cornerRadius: CGFloat) {
+                          backgroundColor: UIColor = .blueCard,
+                          cornerRadius: CGFloat,
+                          borderWidth: CGFloat = 0,
+                          borderColor: UIColor = .clear) {
+        
         setTitle(text, for: .normal)
         setTitleColor(textColor, for: .normal)
         
@@ -37,11 +40,19 @@ final class QSButton: UIButton {
             titleLabel?.font = AppConstants.Font.EBGaramond.bold
         }
         
+        self.titleLabel?.numberOfLines = 0
+        
         self.contentHorizontalAlignment = contentAlignment
         
         self.backgroundColor = backgroundColor
         
         self.layer.cornerRadius = cornerRadius
+        
+        if borderWidth != 0 {
+            self.layer.masksToBounds = true
+            self.layer.borderColor = borderColor.cgColor
+            self.layer.borderWidth = borderWidth
+        }
     }
     
     private func setQSButton() {
